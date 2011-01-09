@@ -4,8 +4,6 @@
  * 
  */
 var sys = require('sys');
-var sys = require('util');
-var sys = require('path');
 
 function Divider() {
    this.bar = '========================';
