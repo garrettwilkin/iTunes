@@ -7,34 +7,10 @@
  * 
  */
 
+var sys = require('sys');
 var http = require('http');
 var querystring = require('querystring');
-
-/*
- * 
- * Silly class for making debugging output easier on the eyes.
- * 
- */
-
-
-function divider() {
-   this.bar = '========================';
-};
-
-divider.prototype.print = function (section) {
-    console.log(this.bar);
-    console.log(section);
-    console.log(this.bar);
-};
-
-divider.prototype.spacer = function (lines) {
-    var i = 0;
-    while (lines > i) {
-        --lines;
-        console.log(' ');
-    };
-};
-
+var Divider = require('./divider');
 /*
  * 
  * Simple stopwatch like class.  I noticed that the requests seemed to lag.
@@ -79,7 +55,7 @@ function iParameters() {
     this.media = 'all';
     this.entity = 'musicTrack';
     this.attribute = 'all';
-    this.callback = 'wsSearchCB';
+//    this.callback = 'wsSearchCB';
     this.limit = '100';
     this.lang = 'en_us';
     this.version = '2';
@@ -116,8 +92,12 @@ iResults.prototype.clean = function (data) {
 };
 
 iResults.prototype.capture = function (data) {
-    this.dataString = this.clean(data);
+    
+//    this.dataString = this.clean(data);
+    this.dataString = data;
     this.obj = JSON.parse(this.dataString);
+    this.dataArray = this.obj.results;
+    pretty.print(JSON.stringify(this.dataArray));
     
 };
 
@@ -152,7 +132,7 @@ function Search() {
 };
 
 Search.prototype.setArtist = function(artist) {
-   this.AppleMedia.params.term = artist; 
+   this.AppleMedia.params.term = artist.replace(/ /g,'+'); 
    this.AppleMedia.params.entity = 'musicArtist'; 
    this.AppleMedia.params.attribute= 'artistTerm'; 
    this.AppleMedia.params.media = 'music'; 
@@ -161,6 +141,7 @@ Search.prototype.setArtist = function(artist) {
 
 Search.prototype.request = function(method) {
     var ok = 1;
+    var clock = new timer();
     if (method == 'itunes') {
         console.log('Initiating iTunes request.');
         var apple = http.createClient(80,this.AppleMedia.server);
@@ -196,9 +177,15 @@ Search.prototype.request = function(method) {
 pretty = new divider();
 pretty.print('iTunes API Implementation in node.js');
 
-trackData = new Search();
-clock = new timer();
 
-trackData.setArtist('Smashing+Pumpkins');
-trackData.request('7digital');
+trackData = new Search();
+trackData.setArtist('John Coltrane');
 trackData.request('itunes');
+
+trackData2 = new Search();
+trackData2.setArtist('Smashing Pumpkins');
+trackData2.request('itunes');
+
+trackData3 = new Search();
+trackData3.setArtist('Miles Davis');
+trackData3.request('itunes');
