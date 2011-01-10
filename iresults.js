@@ -4,10 +4,23 @@
  * specific attributes.
  */
 
+var Divider = require('./divider.js').Divider;
+var pretty = new Divider();
+var total = 0;
+var complete = 0;
+
+
 function iResults() {
-    this.dataString = '';
+    this.glob = '';
+    this.numGlobs = 0;
+    total++;
 };
 exports.iResults = iResults;
+
+
+iResults.prototype.stats = function () {
+   pretty.print('iResults.prototype.stats ' + complete + '/' + total);
+};
 
 iResults.prototype.clean = function (data) {
     var garbage = '';
@@ -28,11 +41,16 @@ iResults.prototype.clean = function (data) {
 };
 
 iResults.prototype.capture = function (data) {
+    this.numGlobs++;
+    pretty.print('iResults.capture ' + this.numGlobs + ' : \n' + data);
+    this.glob += data;
+};
 
-//    this.dataString = this.clean(data);
-    this.dataString = data;
-    this.obj = JSON.parse(this.dataString);
+iResults.prototype.parse = function () {
+    complete++;
+    iResults.prototype.stats();
+    pretty.print('iResults.parse : ' + this.glob);
+    this.obj = JSON.parse(this.glob);
     this.dataArray = this.obj.results;
-    pretty.print(JSON.stringify(this.dataArray));
-
+    pretty.print('iResults.parse JSON: ' + JSON.stringify(this.dataArray));
 };

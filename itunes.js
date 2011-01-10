@@ -77,6 +77,7 @@ Search.prototype.setArtist = function(artist) {
 Search.prototype.request = function(method) {
     var ok = 1;
     var clock = new Timer();
+    
     if (method == 'itunes') {
         console.log('Initiating iTunes request.');
         var apple = http.createClient(80,this.AppleMedia.server);
@@ -89,14 +90,16 @@ Search.prototype.request = function(method) {
         request.end();
         clock.set();
         request.on('response', function(response) {
-            console.log('STATUS: ' + response.statusCode);
-            console.log('HEADERS ' + JSON.stringify(response.headers));
-            pretty.spacer(3);
+//            console.log('STATUS: ' + response.statusCode);
+//            console.log('HEADERS ' + JSON.stringify(response.headers));
             response.setEncoding('utf8');
             response.on('data', function(chunk) {
                 clock.elapsed();
-                pretty.print('BODY: ' + chunk);
                 trackData.iresults.capture(chunk);
+            });
+            response.on('end', function() {
+                clock.elapsed();
+                trackData.iresults.parse();
             });
         });
     } else {
