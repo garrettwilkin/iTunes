@@ -7,38 +7,11 @@
  * 
  */
 
-var sys = require('sys');
 var http = require('http');
 var querystring = require('querystring');
-var Divider = require('./divider');
-/*
- * 
- * Simple stopwatch like class.  I noticed that the requests seemed to lag.
- * Now I can easily monitor how much they are lagging without clouding up
- * my code.
- * 
- */
-
-function timer() {
-    this.date = new Date();
-    this.bigBang = this.date.getTime();
-    this.lastTime = 0;
-};
-
-timer.prototype.set = function() {
-    var now = new Date();
-    this.lastTime = now.getTime();
-}
-
-timer.prototype.elapsed = function() {
-    var millsPerSecond = 1000;
-    var now = new Date();
-    var nowMills = now.getTime();
-    var elapsedMills = nowMills - this.lastTime;
-    var elapsedSeconds = elapsedMills / millsPerSecond;
-    pretty.print('Time elapsed: ' + elapsedSeconds);
-    return elapsedSeconds;
-};
+var Divider = require('./divider').Divider;
+var Timer = require('./timer.js').Timer;
+var iResults= require('./iresults.js').iResults;
 
 
 /*
@@ -61,44 +34,6 @@ function iParameters() {
     this.version = '2';
     this.explicit = 'Yes';
 
-};
-
-/*
- * Object to hold iTunes search query results.
- * The result from apple is JSON format. This class will support pulling out 
- * specific attributes.
- */
-
-function iResults() {
-    this.dataString = '';
-}
-
-iResults.prototype.clean = function (data) {
-    var garbage = '';
-    var sliced = data.split('\n');
-    var length = sliced.length;
-    pretty.print('Data has ' + length + ' rows.');
-    pretty.print(sliced.toString());
-    garbage = sliced.shift();
-    garbage = sliced.shift();
-    garbage = sliced.shift();
-    garbage = sliced.pop();
-    garbage = sliced.pop();
-    garbage = sliced.pop();
-    length = sliced.length;
-    pretty.print('Data has ' + length + ' rows.');
-    pretty.print(sliced.toString());
-    return sliced.toString();
-};
-
-iResults.prototype.capture = function (data) {
-    
-//    this.dataString = this.clean(data);
-    this.dataString = data;
-    this.obj = JSON.parse(this.dataString);
-    this.dataArray = this.obj.results;
-    pretty.print(JSON.stringify(this.dataArray));
-    
 };
 
 /*
@@ -141,7 +76,7 @@ Search.prototype.setArtist = function(artist) {
 
 Search.prototype.request = function(method) {
     var ok = 1;
-    var clock = new timer();
+    var clock = new Timer();
     if (method == 'itunes') {
         console.log('Initiating iTunes request.');
         var apple = http.createClient(80,this.AppleMedia.server);
@@ -174,9 +109,8 @@ Search.prototype.request = function(method) {
  * Demo
  */
 
-pretty = new divider();
+pretty = new Divider();
 pretty.print('iTunes API Implementation in node.js');
-
 
 trackData = new Search();
 trackData.setArtist('John Coltrane');

@@ -3,12 +3,10 @@
  * Silly class for making debugging output easier on the eyes.
  * 
  */
-var sys = require('sys');
 
 function Divider() {
    this.bar = '========================';
 };
-sys.inherits(Divider);
 exports.Divider = Divider;
 
 Divider.prototype.print = function (section) {
