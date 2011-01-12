@@ -24,14 +24,12 @@ iResults.prototype.stats = function () {
 
 iResults.prototype.capture = function (data) {
     this.numGlobs++;
-    pretty.print('iResults.capture ' + this.numGlobs + ' : \n' + data);
     this.glob += data;
 };
 
 iResults.prototype.parse = function () {
     complete++;
     iResults.prototype.stats();
-    pretty.print('iResults.parse : ' + this.glob);
     try
     {
         this.obj = JSON.parse(this.glob);
@@ -40,6 +38,6 @@ iResults.prototype.parse = function () {
     }
     catch (err)
     {
-        pretty.print('error while parsing JSON \n' + this.glob);
+        pretty.print('iResults.parse: error while parsing JSON \n' + this.glob);
     }
 };

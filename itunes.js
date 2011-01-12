@@ -65,21 +65,23 @@ function Search() {
     this.AppleMedia = new iTunes();
     this.iresults = new iResults();
 };
+exports.Search= Search;
 
-Search.prototype.setArtist = function(artist) {
+Search.prototype.getArtist = function(artist) {
    this.AppleMedia.params.term = artist.replace(/ /g,'+'); 
    this.AppleMedia.params.entity = 'musicArtist'; 
    this.AppleMedia.params.attribute= 'artistTerm'; 
    this.AppleMedia.params.media = 'music'; 
+   this.request('itunes',this.AppleMedia.params.term)
 };
 
 
-Search.prototype.request = function(method) {
+Search.prototype.request = function(source, label) {
     var self = this;
     var ok = 1;
-    var clock = new Timer();
+    var clock = new Timer(label);
     
-    if (method == 'itunes') {
+    if (source== 'itunes') {
         console.log('Initiating iTunes request.');
         var apple = http.createClient(80,self.AppleMedia.server);
         var query = self.AppleMedia.getQuery();
@@ -104,26 +106,7 @@ Search.prototype.request = function(method) {
             });
         });
     } else {
-        pretty.print('method (' + method + ') not yet implemented');
+        pretty.print('source (' + source + ') not yet implemented');
     }
     return ok;
 };
-
-/*
- * Demo
- */
-
-pretty = new Divider();
-pretty.print('iTunes API Implementation in node.js');
-
-trackData = new Search();
-trackData.setArtist('Bon Iver');
-trackData.request('itunes');
-
-trackData2 = new Search();
-trackData2.setArtist('Smashing Pumpkins');
-trackData2.request('itunes');
-
-trackData3 = new Search();
-trackData3.setArtist('We Are Scientists');
-trackData3.request('itunes');
