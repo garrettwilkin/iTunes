@@ -75,17 +75,18 @@ Search.prototype.setArtist = function(artist) {
 
 
 Search.prototype.request = function(method) {
+    var self = this;
     var ok = 1;
     var clock = new Timer();
     
     if (method == 'itunes') {
         console.log('Initiating iTunes request.');
-        var apple = http.createClient(80,this.AppleMedia.server);
-        var query = this.AppleMedia.getQuery();
-        var path = this.AppleMedia.basePath + query;
-        console.log('SERVER: ' + this.AppleMedia.server);
+        var apple = http.createClient(80,self.AppleMedia.server);
+        var query = self.AppleMedia.getQuery();
+        var path = self.AppleMedia.basePath + query;
+        console.log('SERVER: ' + self.AppleMedia.server);
         console.log('PATH: ' + path);
-        var request = apple.request('GET',path,{host:this.AppleMedia.server});
+        var request = apple.request('GET',path,{host:self.AppleMedia.server});
         apple.request('GET',path);
         request.end();
         clock.set();
@@ -95,11 +96,11 @@ Search.prototype.request = function(method) {
             response.setEncoding('utf8');
             response.on('data', function(chunk) {
                 clock.elapsed();
-                trackData.iresults.capture(chunk);
+                self.iresults.capture(chunk);
             });
             response.on('end', function() {
                 clock.elapsed();
-                trackData.iresults.parse();
+                self.iresults.parse();
             });
         });
     } else {
