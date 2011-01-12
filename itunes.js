@@ -29,7 +29,7 @@ function iParameters() {
     this.entity = 'musicTrack';
     this.attribute = 'all';
 //    this.callback = 'wsSearchCB';
-    this.limit = '100';
+    this.limit = '40';
     this.lang = 'en_us';
     this.version = '2';
     this.explicit = 'Yes';
@@ -116,7 +116,7 @@ pretty = new Divider();
 pretty.print('iTunes API Implementation in node.js');
 
 trackData = new Search();
-trackData.setArtist('John Coltrane');
+trackData.setArtist('Bon Iver');
 trackData.request('itunes');
 
 trackData2 = new Search();
@@ -124,5 +124,5 @@ trackData2.setArtist('Smashing Pumpkins');
 trackData2.request('itunes');
 
 trackData3 = new Search();
-trackData3.setArtist('Miles Davis');
+trackData3.setArtist('We Are Scientists');
 trackData3.request('itunes');
