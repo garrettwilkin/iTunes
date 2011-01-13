@@ -7,7 +7,7 @@
  * 
  */
 
-var Search = require('./itunes.js').Search;
+var MetaMedia = require('./metamedia.js').MetaMedia;
 var Divider = require('./divider').Divider;
 
 /*
@@ -17,11 +17,14 @@ var Divider = require('./divider').Divider;
 pretty = new Divider();
 pretty.print('iTunes API Implementation in node.js');
 
-trackData = new Search();
-trackData.getArtist('Bon Iver');
+artistData = new MetaMedia();
+artistData.getArtist('Bon Iver');
 
-trackData2 = new Search();
-trackData2.getArtist('Smashing Pumpkins');
+artistData2 = new MetaMedia();
+artistData2.getArtist('Smashing Pumpkins');
 
-trackData3 = new Search();
-trackData3.getArtist('We Are Scientists');
+artistData3 = new MetaMedia();
+artistData3.getArtist('We Are Scientists');
+
+artistData4 = new MetaMedia();
+artistData4.getArtist('John Coltrane');
