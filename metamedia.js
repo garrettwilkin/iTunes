@@ -12,7 +12,7 @@ var iTunes = require('./itunes').iTunes;
 var http = require('http');
 
 function MetaMedia() {
-    this.AppleMedia = new iTunes();
+    this.AppleMedia = new iTunes('123456789-ABC');
 };
 exports.MetaMedia = MetaMedia;
 

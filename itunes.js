@@ -11,6 +11,7 @@ var http = require('http');
 var iResults= require('./iresults').iResults;
 var Timer = require('./timer').Timer;
 var querystring = require('querystring');
+var Divider = require('./divider.js').Divider;
 
 /*
  * 
@@ -40,11 +41,13 @@ function iParameters() {
  * 
  */
 
-function iTunes() {
+function iTunes(apiKey) {
     this.params = new iParameters();
     this.basePath = '/WebObjects/MZStoreServices.woa/wa/wsSearch?';
     this.server= 'ax.itunes.apple.com';
     this.iresults = new iResults();
+    this.info= new Divider('iTunes');
+    this.apiKey = apiKey;
 };
 exports.iTunes = iTunes;
 
@@ -64,9 +67,9 @@ iTunes.prototype.getQuery = function() {
     return query;
 };
 
-iTunes.prototype.request = function(source, label) {
+iTunes.prototype.request = function() {
     var self = this;
-    var clock = new Timer(label);
+    var clock = new Timer(self.params.term);
     var apple = http.createClient(80,self.server);
     var query = self.getQuery();
     var path = self.basePath + query;
@@ -87,4 +90,18 @@ iTunes.prototype.request = function(source, label) {
             self.iresults.parse();
         });
     });
+};
+
+iTunes.prototype.lookupAlbum = function(params, callback) {
+    var self = this;
+    var artist = params.artist;
+    var album = params.album;
+    self.info.print('artist: ' + artist + ' album: ' + album);  
+    self.params.media='music';
+    self.params.entity='album';
+    self.params.attribute='albumTerm';
+    self.params.term=album;
+    self.request();
+    self.iresults.getAlbum();
+    callback(0,self.iresults.getAlbum());
 };

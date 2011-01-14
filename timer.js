@@ -6,11 +6,14 @@
  * 
  */
 
+var Divider = require('./divider').Divider;
+
 function Timer(name) {
     this.date = new Date();
     this.bigBang = this.date.getTime();
     this.lastTime = 0;
     this.name = name;
+    this.inform = new Divider('Timer');
 };
 exports.Timer = Timer;
 
@@ -25,6 +28,6 @@ Timer.prototype.elapsed = function() {
     var nowMills = now.getTime();
     var elapsedMills = nowMills - this.lastTime;
     var elapsedSeconds = elapsedMills / millsPerSecond;
-    pretty.print('Timer ' + this.name + ' elapsed: ' + elapsedSeconds);
+    this.inform.print(this.name + ' elapsed: ' + elapsedSeconds);
     return elapsedSeconds;
 };

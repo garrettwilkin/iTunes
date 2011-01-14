@@ -4,14 +4,15 @@
  * 
  */
 
-function Divider() {
+function Divider(label) {
    this.bar = '========================';
+   this.label = label;
 };
 exports.Divider = Divider;
 
-Divider.prototype.print = function (section) {
+Divider.prototype.print = function (message) {
     console.log(this.bar);
-    console.log(section);
+    console.log(this.label + " : " + message);
     console.log(this.bar);
 };
 
