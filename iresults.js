@@ -37,13 +37,20 @@ iResults.prototype.capture = function (data) {
  iTunes returns a JSON that contains two elements:
     a count of the results
     a single element array containing a JSON of the result set.
- prints debugging statements but will not return an error, forcing the programmer to check for 'undefined' in other places.
+ This function sets the self.data to the actual itunes data set and returns 1 if parsing was successful, 0 otherwise.
+ In this way, the function can be used in an if statement.
+ e.g. if (self.parse) {
+        //analyze & process the data
+      } else {
+        //raise a warning
+      }
  */
 
 iResults.prototype.parse = function () {
     var self = this;
     complete++;
     self.stats();
+    var success = 1;
     try
     {
         self.rawJSON= JSON.parse(self.glob);
@@ -54,10 +61,12 @@ iResults.prototype.parse = function () {
     catch (err)
     {
         self.inform.print('iResults.parse: error while parsing JSON \n' + self.glob);
+        success = 0;
     }
     if (self.data == 'undefined') {
         self.inform.print('Parse error.  First element of results array is undefined');
     }
+    return success;
 };
 
 /*

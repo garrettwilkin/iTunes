@@ -27,7 +27,6 @@ function iParameters() {
     this.media = 'all';
     this.entity = 'musicTrack';
     this.attribute = 'all';
-//    this.callback = 'wsSearchCB';
     this.limit = '1';
     this.lang = 'en_us';
     this.version = '2';
@@ -111,19 +110,22 @@ iTunes.prototype.request = function(dataType, callback) {
 iTunes.prototype.responseEnd = function(dataType, results, callback) {
     var self = this;
     var error = 0;
-    results.parse();
     var data = '';
-    switch(dataType)
-    {
-    case 'album':
-        if (results.hits > 1) {
-            self.info.print('Multiple results, cant choose');
-        } else {
-            data = results.getAlbum();
-        };
-        break;
-    default:
-        self.info.print('Unknown dataType.  Returning error.');
+    if (results.parse()) {
+        switch(dataType)
+        {
+        case 'album':
+            if (results.hits > 1) {
+                self.info.print('Multiple results, cant choose');
+            } else {
+                data = results.getAlbum();
+            };
+            break;
+        default:
+            self.info.print('Unknown dataType.  Returning error.');
+            error = 1;
+        }
+    } else {
         error = 1;
     }
     callback(error,data);
