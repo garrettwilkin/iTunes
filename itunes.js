@@ -28,7 +28,7 @@ function iParameters() {
     this.entity = 'musicTrack';
     this.attribute = 'all';
 //    this.callback = 'wsSearchCB';
-    this.limit = '40';
+    this.limit = '1';
     this.lang = 'en_us';
     this.version = '2';
     this.explicit = 'Yes';
@@ -44,13 +44,15 @@ function iParameters() {
 function iTunes(apiKey) {
     this.params = new iParameters();
     this.basePath = '/WebObjects/MZStoreServices.woa/wa/wsSearch?';
-    this.server= 'ax.itunes.apple.com';
-    this.iresults = new iResults();
-    this.info= new Divider('iTunes');
+    this.server = 'ax.itunes.apple.com';
+    this.info = new Divider('iTunes');
     this.apiKey = apiKey;
 };
 exports.iTunes = iTunes;
 
+
+/*
+ Must be rewritten to support MetaMedia class.
 iTunes.prototype.getArtist = function(artist) {
    this.params.term = artist.replace(/ /g,'+');
    this.params.entity = 'musicArtist';
@@ -58,23 +60,33 @@ iTunes.prototype.getArtist = function(artist) {
    this.params.media = 'music';
    this.request('itunes',this.params.term)
 };
+*/
 
 
 iTunes.prototype.getQuery = function() {
-    console.log(this.params);
+    this.info.print(this.params);
     var query = querystring.stringify(this.params);
-    console.log('QUERY : ' + query);
+    this.info.print('QUERY : ' + query);
     return query;
 };
 
-iTunes.prototype.request = function() {
+/*
+ This function fires off the http request to iTunes.
+ The type of data object to be returned must be specified.
+ A callback must now be provided. This callback will be given two parameters:
+    - error - a boolean indicating whether or not there was an error
+    - data - an object encapsulating the information relevant to the request. 
+ */
+
+iTunes.prototype.request = function(dataType, callback) {
     var self = this;
+    var results = new iResults();
     var clock = new Timer(self.params.term);
     var apple = http.createClient(80,self.server);
     var query = self.getQuery();
     var path = self.basePath + query;
-    console.log('SERVER: ' + self.server);
-    console.log('PATH: ' + path);
+    self.info.print('SERVER: ' + self.server);
+    self.info.print('PATH: ' + path);
     var request = apple.request('GET',path,{host:self.server});
     apple.request('GET',path);
     request.end();
@@ -83,14 +95,44 @@ iTunes.prototype.request = function() {
         response.setEncoding('utf8');
         response.on('data', function(chunk) {
             clock.elapsed();
-            self.iresults.capture(chunk);
+            results.capture(chunk);
         });
-        response.on('end', function() {
+        response.on('end',function() {
             clock.elapsed();
-            self.iresults.parse();
+            self.responseEnd(dataType,results,callback);
         });
     });
 };
+
+/*
+ As the request to the iTunes store completes, this function is called to process that response.  It passes the job of parsing the results off to the iResults class.  It then determines what type of object should be passed to the callback function based on the dataType requested by they user.
+ */
+
+iTunes.prototype.responseEnd = function(dataType, results, callback) {
+    var self = this;
+    var error = 0;
+    results.parse();
+    var data = '';
+    switch(dataType)
+    {
+    case 'album':
+        if (results.hits > 1) {
+            self.info.print('Multiple results, cant choose');
+        } else {
+            data = results.getAlbum();
+        };
+        break;
+    default:
+        self.info.print('Unknown dataType.  Returning error.');
+        error = 1;
+    }
+    callback(error,data);
+};
+
+/*
+ This function: 1 - sets the parameters required for looking up an album.
+                2 - requests that an Album data type be passed to the callback.
+ */
 
 iTunes.prototype.lookupAlbum = function(params, callback) {
     var self = this;
@@ -101,7 +143,5 @@ iTunes.prototype.lookupAlbum = function(params, callback) {
     self.params.entity='album';
     self.params.attribute='albumTerm';
     self.params.term=album;
-    self.request();
-    self.iresults.getAlbum();
-    callback(0,self.iresults.getAlbum());
+    self.request('album',callback);
 };

@@ -18,6 +18,9 @@ var iTunes = require('./itunes').iTunes;
 inform = new Divider('Demo');
 inform.print('iTunes API Implementation in node.js');
 
+/*
+ This is now out of date and no longer works.  MetaMedia needs to be rewritten to use the changed iTunes class.
+ */
 function old() {
 
     artistData = new MetaMedia();
@@ -41,11 +44,9 @@ function Track(artist, album) {
     this.itunesLink = '';
 };
 
-function Album(url) {
-    this.storeUrl = url;
-};
-
 /*
+ Original theoretical code design:
+ ---------------------------------
 function getStoreLink(track) {
     itunesClient.lookupAlbum({artist: track.artist, album: track.album}, function(error, album) {
         if (error) {
@@ -57,25 +58,62 @@ function getStoreLink(track) {
     });
 }
 */
+
+var itunesClient = new iTunes('garrett-the-tunes-broker-1234');
+
+/*
+ Actual implemented code design:
+ ------------------------------
+*/
+
+function getStoreLink(track) {
+    itunesClient.lookupAlbum({artist: track.artist, album: track.album}, function(error, album) {
+        if (error) {
+            pretty.print('there was an error');
+        } else {
+            track.itunesLink = album.storeUrl;
+            inform.print(track.itunesLink);
+        }
+    });
+}
+
+/*
+ Example of reusing the iTunes object twice 
+ (pssst... its used in the getStoreLink function).
+ */
  
 function newer() {
-   var itunesClient = new iTunes('garrett-the-tunes-broker-1234');
-
-   function getStoreLink(track) {
-        itunesClient.lookupAlbum({artist: track.artist, album: track.album}, function(error, album) {
-            if (error) {
-                pretty.print('there was an error');
-            } else {
-                track.itunesLink = album.storeUrl;
-                //track.emit('storeLink');
-            }
-        });
-    }
 
     var qwantzTrack = new Track('Smashing Pumpkins','Siamese Dream');
+    getStoreLink(qwantzTrack);
+
+    var qwantzTrack = new Track('Miles Davis','Kind of Blue');
     getStoreLink(qwantzTrack);
 
     inform.print('Result of new design: ' + qwantzTrack.itunesLink);
 }
 
-newer();
+/*
+ Example of reusing the iTunes object four times, slightly differently.
+ (pssst... its used in the getStoreLink function).
+*/
+
+function evenNewer() {
+
+    var track1 = new Track('Miles Davis','Kind of Blue');
+    var track2 = new Track('Smashing Pumpkins','Siamese Dream');
+    var track3 = new Track('Aerosmith','Get a Grip');
+    var lastTrack = new Track('Beastie Boys','Pauls Boutique');
+
+    var tracks = [track1,
+                  track2,
+                  track3,
+                  lastTrack];
+    for (i in tracks)
+    {
+        getStoreLink(tracks[i]);
+    };
+
+};
+
+evenNewer();
