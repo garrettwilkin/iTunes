@@ -11,7 +11,7 @@ var http = require('http');
 var iResults= require('./iresults').iResults;
 var Timer = require('./timer').Timer;
 var querystring = require('querystring');
-var Divider = require('./divider.js').Divider;
+var Divider = require('./divider').Divider;
 
 /*
  * 
