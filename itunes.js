@@ -40,12 +40,11 @@ function iParameters() {
  * 
  */
 
-function iTunes(apiKey) {
+function iTunes() {
     this.params = new iParameters();
     this.basePath = '/WebObjects/MZStoreServices.woa/wa/wsSearch?';
     this.server = 'ax.itunes.apple.com';
     this.info = new Divider('iTunes');
-    this.apiKey = apiKey;
 };
 exports.iTunes = iTunes;
 
@@ -121,6 +120,8 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
                 data = results.getAlbum();
             };
             break;
+        case 'raw':
+            data = results.data; // returns JSON for full results
         default:
             self.info.print('Unknown dataType.  Returning error.');
             error = 1;

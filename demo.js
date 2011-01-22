@@ -11,6 +11,8 @@ var MetaMedia = require('./metamedia').MetaMedia;
 var Divider = require('./divider').Divider;
 var iTunes = require('./itunes').iTunes;
 var LinkShare = require('./linkshare').LinkShare;
+//var log4js = require('log4js')();
+
 
 /*
  * Demo
@@ -60,7 +62,6 @@ function getStoreLink(track) {
 }
 */
 
-var itunesClient = new iTunes('garrett-the-tunes-broker-1234');
 
 /*
  Actual implemented code design:
@@ -84,6 +85,17 @@ function getStoreLink(track) {
  */
  
 function newer() {
+    var itunesClient = new iTunes();
+    function getStoreLink(track) {
+        itunesClient.lookupAlbum({artist: track.artist, album: track.album}, function(error, album) {
+            if (error) {
+                pretty.print('there was an error');
+            } else {
+                track.itunesLink = album.storeUrl;
+                inform.print(track.itunesLink);
+            }
+        });
+    }
 
     var qwantzTrack = new Track('Smashing Pumpkins','Siamese Dream');
     getStoreLink(qwantzTrack);
@@ -100,6 +112,17 @@ function newer() {
 */
 
 function evenNewer() {
+    var itunesClient = new iTunes();
+    function getStoreLink(track) {
+        itunesClient.lookupAlbum({artist: track.artist, album: track.album}, function(error, album) {
+            if (error) {
+                pretty.print('there was an error');
+            } else {
+                track.itunesLink = album.storeUrl;
+                inform.print(track.itunesLink);
+            }
+        });
+    }
 
     var track1 = new Track('Miles Davis','Kind of Blue');
     var track2 = new Track('Smashing Pumpkins','Siamese Dream');
@@ -118,14 +141,17 @@ function evenNewer() {
 };
 
 function withLinkShare() {
+    var itunesClient = new iTunes();
 
     function getStoreLink(track) {
         itunesClient.lookupAlbum({artist: track.artist, album: track.album}, function(error, album) {
             if (error) {
-                pretty.print('there was an error');
+                pretty.print('Could not find album ' + track.album + ' by ' + track.artist);
             } else {
                 track.itunesLink = album.storeUrl;
                 inform.print(track.itunesLink);
+                inform.print(track.albumUrl60);
+                inform.print(track.albumUrl100);
                 var token = '51513f78fd1448d3e722ccf3cd4d79d5af7ac710b4badea2f1bd0a685bd2b85e';
                 var merchantId = '13508';
                 var linkshare = new LinkShare(token,merchantId,track.itunesLink);
