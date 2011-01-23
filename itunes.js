@@ -10,10 +10,10 @@
 require.paths.unshift(require('path').join(__dirname));
 
 var http = require('http');
-var iResults= require('./iresults').iResults;
-var Timer = require('./timer').Timer;
+var iResults= require('iresults').iResults;
+var Timer = require('timer').Timer;
 var querystring = require('querystring');
-var Divider = require('./divider').Divider;
+var Divider = require('divider').Divider;
 
 /*
  * 
@@ -43,6 +43,12 @@ function iParameters() {
  */
 
 function iTunes() {
+    this.params = new iParameters();
+    this.basePath = '/WebObjects/MZStoreServices.woa/wa/wsSearch?';
+    this.server = 'ax.itunes.apple.com';
+    this.info = new Divider('iTunes');
+};
+function iTunes(artist,album) {
     this.params = new iParameters();
     this.basePath = '/WebObjects/MZStoreServices.woa/wa/wsSearch?';
     this.server = 'ax.itunes.apple.com';

@@ -1,7 +1,8 @@
+require.paths.unshift(require('path').join(__dirname));
 var http = require('http');
 var url = require('url');
-var iTunes = require('./itunes').iTunes;
-var LinkShare = require('./linkshare').LinkShare;
+var iTunes = require('itunes').iTunes;
+var LinkShare = require('linkshare').LinkShare;
 
 var lastPath = '';
 

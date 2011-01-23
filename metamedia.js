@@ -5,10 +5,11 @@
  *     *Last.fm
  *     *Amazon
  */
+require.paths.unshift(require('path').join(__dirname));
 
 var http = require('http');
-var Divider = require('./divider').Divider;
-var iTunes = require('./itunes').iTunes;
+var Divider = require('divider').Divider;
+var iTunes = require('itunes').iTunes;
 var http = require('http');
 
 function MetaMedia() {

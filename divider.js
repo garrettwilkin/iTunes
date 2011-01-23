@@ -3,6 +3,7 @@
  * Silly class for making debugging output easier on the eyes.
  * 
  */
+require.paths.unshift(require('path').join(__dirname));
 
 function Divider(label) {
    this.bar = '========================';
