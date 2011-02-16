@@ -1,3 +1,17 @@
-iTunes: an implementationof the iTunes API in Node.js.
+iTunes: an implementation of the iTunes API in Node.js.
 
 Authored by Garrett Wilkin (http://geethink.com/blog)
+
+It uses both the iTunes API for retrieving media information and the LinkShare API for generating affiliate links to the iTunes store.
+
+See simple-node.js for a practical  example implementation of the libraries.
+
+To Do:
+-----
+* Add more winston logging
+  - use file and console transport simultaneously
+* Make installable via npm
+* Add Last.fm API
+* Add Amazon API
+* Add 7Digital API
+* Add that lyrics API service... what was it?
