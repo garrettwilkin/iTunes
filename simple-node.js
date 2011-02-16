@@ -1,3 +1,10 @@
+/*
+ * Author: Garrett Wilkin garrett.wilkin@gmail.com @garrettwilkin geethink.com/blog
+ * A simple webserver that demonstrates practical use of the iTunes library.
+ * Currently it looks up the album art for several hard coded albums.
+ * Run "node simple-node.js" and point your browser to 'localhost:8005/woot'.
+ */
+
 require.paths.unshift(require('path').join(__dirname));
 var http = require('http');
 var url = require('url');
@@ -74,7 +81,8 @@ function handleWebRequest(request, response) {
       response.write('<p>The End.');
     }
 
-    //Commenting out response.end() allows the album art to pop into the page when the callbacks complete!
+    //Commenting out response.end() allows the album art to 
+    //pop into the page when the callbacks complete!
     //response.end();
 
     if (path != '/favicon.ico') {
