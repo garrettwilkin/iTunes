@@ -8,6 +8,7 @@ See simple-node.js for a practical  example implementation of the libraries.
 
 To Do:
 -----
+* Update for Node. 0.4.1
 * Add more winston logging
   - use file and console transport simultaneously
 * Make installable via npm

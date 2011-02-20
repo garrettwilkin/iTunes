@@ -49,11 +49,11 @@ LinkShare.prototype.getLink = function(callback) {
     request.on('response', function(response) {
         response.setEncoding('utf8');
         response.on('data', function(chunk) {
-            clock.elapsed();
+            clock.elapsed('data');
             self.trackingUrl+=chunk;
         });
         response.on('end',function() {
-            clock.elapsed();
+            clock.elapsed('end');
             callback(self.trackingUrl);
         });
     });

@@ -100,11 +100,11 @@ iTunes.prototype.request = function(dataType, callback) {
     request.on('response', function(response) {
         response.setEncoding('utf8');
         response.on('data', function(chunk) {
-            clock.elapsed();
+            clock.elapsed('data');
             results.capture(chunk);
         });
         response.on('end',function() {
-            clock.elapsed();
+            clock.elapsed('end');
             self.responseEnd(dataType,results,callback);
         });
     });

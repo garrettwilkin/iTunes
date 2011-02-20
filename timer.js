@@ -29,6 +29,6 @@ Timer.prototype.elapsed = function( phase ) {
     var nowMills = now.getTime();
     var elapsedMills = nowMills - this.lastTime;
     var elapsedSeconds = elapsedMills / millsPerSecond;
-    this.inform.print(this.name +  ' : ' + phase + ' : elapsed ' + elapsedSeconds);
+    this.inform.print(this.name +  ' - ' + phase + ' elapsed : ' + elapsedSeconds);
     return elapsedSeconds;
 };
