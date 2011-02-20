@@ -70,7 +70,7 @@ iTunes.prototype.getArtist = function(artist) {
 
 
 iTunes.prototype.getQuery = function() {
-    this.info.print(this.params);
+    this.info.print(JSON.stringify(this.params));
     var query = querystring.stringify(this.params);
     this.info.print('QUERY : ' + query);
     return query;
