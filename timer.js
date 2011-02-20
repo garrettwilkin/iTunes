@@ -23,12 +23,12 @@ Timer.prototype.set = function() {
     this.lastTime = now.getTime();
 }
 
-Timer.prototype.elapsed = function() {
+Timer.prototype.elapsed = function( phase ) {
     var millsPerSecond = 1000;
     var now = new Date();
     var nowMills = now.getTime();
     var elapsedMills = nowMills - this.lastTime;
     var elapsedSeconds = elapsedMills / millsPerSecond;
-    this.inform.print(this.name + ' elapsed: ' + elapsedSeconds);
+    this.inform.print(this.name +  ' : ' + phase + ' : elapsed ' + elapsedSeconds);
     return elapsedSeconds;
 };
