@@ -1,0 +1,14 @@
+{
+  "name":"itunes",
+  "description":"An implementation of the iTunes API in NodeJS",
+  "version":"0.0.1",
+  "author":"Garrett Wilkin <garrett.wilkin@gmail.com>",
+  "keywords":["itunes","music"],
+  "dependencies": {
+    "winston":">= 0.2.3",
+    "vows":">= 0.5.2"
+  },
+  "main":"itunes.js",
+  "scripts": { "test":"vows tests/*"},
+  "engines":{"node":">= 0.4.1"}
+}

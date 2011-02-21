@@ -7,12 +7,9 @@
  * 
  */
 
-var MetaMedia = require('./metamedia').MetaMedia;
 var Divider = require('./divider').Divider;
 var iTunes = require('./itunes').iTunes;
 var LinkShare = require('./linkshare').LinkShare;
-//var log4js = require('log4js')();
-
 
 /*
  * Demo
@@ -20,26 +17,6 @@ var LinkShare = require('./linkshare').LinkShare;
 
 inform = new Divider('Demo');
 inform.print('iTunes API Implementation in node.js');
-
-/*
- This is now out of date and no longer works.  MetaMedia needs to be rewritten to use the changed iTunes class.
- */
-function old() {
-
-    artistData = new MetaMedia();
-    artistData.getArtist('Bon Iver');
-
-    artistData2 = new MetaMedia();
-    artistData2.getArtist('Smashing Pumpkins');
-
-    artistData3 = new MetaMedia();
-    artistData3.getArtist('We Are Scientists');
-
-    artistData4 = new MetaMedia();
-    artistData4.getArtist('John Coltrane');
-
-}
-
 
 function Track(artist, album) {
     this.artist = artist;
@@ -53,7 +30,7 @@ function Track(artist, album) {
 function getStoreLink(track) {
     itunesClient.lookupAlbum({artist: track.artist, album: track.album}, function(error, album) {
         if (error) {
-            pretty.print('there was an error');
+            inform.print('there was an error');
         } else {
             track.itunesLink = album.storeUrl;
             track.emit('storeLink');
@@ -71,39 +48,12 @@ function getStoreLink(track) {
 function getStoreLink(track) {
     itunesClient.lookupAlbum({artist: track.artist, album: track.album}, function(error, album) {
         if (error) {
-            pretty.print('there was an error');
+            inform.print('there was an error');
         } else {
             track.itunesLink = album.storeUrl;
             inform.print(track.itunesLink);
         }
     });
-}
-
-/*
- Example of reusing the iTunes object twice 
- (pssst... its used in the getStoreLink function).
- */
- 
-function newer() {
-    var itunesClient = new iTunes();
-    function getStoreLink(track) {
-        itunesClient.lookupAlbum({artist: track.artist, album: track.album}, function(error, album) {
-            if (error) {
-                pretty.print('there was an error');
-            } else {
-                track.itunesLink = album.storeUrl;
-                inform.print(track.itunesLink);
-            }
-        });
-    }
-
-    var qwantzTrack = new Track('Smashing Pumpkins','Siamese Dream');
-    getStoreLink(qwantzTrack);
-
-    var qwantzTrack = new Track('Miles Davis','Kind of Blue');
-    getStoreLink(qwantzTrack);
-
-    inform.print('Result of new design: ' + qwantzTrack.itunesLink);
 }
 
 /*
@@ -116,7 +66,7 @@ function evenNewer() {
     function getStoreLink(track) {
         itunesClient.lookupAlbum({artist: track.artist, album: track.album}, function(error, album) {
             if (error) {
-                pretty.print('there was an error');
+                inform.print('there was an error');
             } else {
                 track.itunesLink = album.storeUrl;
                 inform.print(track.itunesLink);
@@ -146,7 +96,7 @@ function withLinkShare() {
     function getStoreLink(track) {
         itunesClient.lookupAlbum({artist: track.artist, album: track.album}, function(error, album) {
             if (error) {
-                pretty.print('Could not find album ' + track.album + ' by ' + track.artist);
+                inform.print('Could not find album ' + track.album + ' by ' + track.artist);
             } else {
                 track.itunesLink = album.storeUrl;
                 inform.print(track.itunesLink);
@@ -178,4 +128,5 @@ function withLinkShare() {
 
 };
 
-withLinkShare();
+evenNewer();
+//withLinkShare();
