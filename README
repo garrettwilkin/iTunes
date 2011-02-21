@@ -4,7 +4,27 @@ Authored by Garrett Wilkin (http://geethink.com/blog)
 
 It uses both the iTunes API for retrieving media information and the LinkShare API for generating affiliate links to the iTunes store.
 
+Currently, the iTunes API is implemented and tested for searching for album information.  See an example in simple-node.js.  A callback function is required for using this package.  The basic steps to using it are:
+
+1. Decide that you want to retrieve some media meta data (only albums supported currently)
+2. Write a function to process this meta data (display it, store it in a database etc.)
+3. initialize an instance of iTunes.
+4. call lookupAlbum supply the media information (e.g. album name, artist name) and the callback function that will process the result.
+
+A very basic use:
+
+
+  var itunesClient = new iTunes();
+  itunesClient.lookupAlbum({artist: 'Smashing Pumpkins', album: 'Siamese Dream'}, function(error, album) {
+     <callback function definition>
+     }
+  );
+
 See simple-node.js for a practical  example implementation of the libraries.
+
+Dependencies
+------------
+Winston - git://github.com/indexzero/winston.git
 
 To Do:
 -----

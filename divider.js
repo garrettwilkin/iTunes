@@ -14,15 +14,8 @@ function Divider(label) {
 exports.Divider = Divider;
 
 Divider.prototype.print = function (message) {
-    //New shiny winston logging.
     var phrase = this.label + ' : ' + message + '\n';
     winston.info(phrase);
-    /*
-     * Old Smelly Console logging.
-    console.log(this.bar);
-    console.log(this.label + " : " + message);
-    console.log(this.bar);
-     */
 };
 
 Divider.prototype.spacer = function (lines) {
