@@ -46,13 +46,13 @@ function iTunes() {
     this.params = new iParameters();
     this.basePath = '/WebObjects/MZStoreServices.woa/wa/wsSearch?';
     this.server = 'ax.itunes.apple.com';
-    this.info = new Divider('iTunes');
+    this.inform = new Divider('iTunes');
 };
 function iTunes(artist,album) {
     this.params = new iParameters();
     this.basePath = '/WebObjects/MZStoreServices.woa/wa/wsSearch?';
     this.server = 'ax.itunes.apple.com';
-    this.info = new Divider('iTunes');
+    this.inform = new Divider('iTunes');
 };
 exports.iTunes = iTunes;
 
@@ -68,11 +68,12 @@ iTunes.prototype.getArtist = function(artist) {
 };
 */
 
-
+// Converts class' parameters JSON to a query string.
+// uncomment inform statements for debugging query string.
 iTunes.prototype.getQuery = function() {
-    this.info.print(JSON.stringify(this.params));
+//    this.inform.print(JSON.stringify(this.params));
     var query = querystring.stringify(this.params);
-    this.info.print('QUERY : ' + query);
+//    this.inform.print('QUERY : ' + query);
     return query;
 };
 
@@ -91,8 +92,8 @@ iTunes.prototype.request = function(dataType, callback) {
     var apple = http.createClient(80,self.server);
     var query = self.getQuery();
     var path = self.basePath + query;
-    self.info.print('SERVER: ' + self.server);
-    self.info.print('PATH: ' + path);
+//    self.inform.print('SERVER: ' + self.server);
+//    self.inform.print('PATH: ' + path);
     var request = apple.request('GET',path,{host:self.server});
     apple.request('GET',path);
     request.end();
@@ -123,7 +124,7 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
         {
         case 'album':
             if (results.hits > 1) {
-                self.info.print('Multiple results, cant choose');
+                self.inform.print('Multiple results, cant choose');
             } else {
                 data = results.getAlbum();
             };
@@ -131,7 +132,7 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
         case 'raw':
             data = results.data; // returns JSON for full results
         default:
-            self.info.print('Unknown dataType.  Returning error.');
+            self.inform.print('Unknown dataType.  Returning error.');
             error = 1;
         }
     } else {
@@ -149,7 +150,7 @@ iTunes.prototype.lookupAlbum = function(params, callback) {
     var self = this;
     var artist = params.artist;
     var album = params.album;
-    self.info.print('artist: ' + artist + ' album: ' + album);  
+    self.inform.print('artist: ' + artist + ' album: ' + album);  
     self.params.media='music';
     self.params.entity='album';
     self.params.attribute='albumTerm';

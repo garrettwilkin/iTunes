@@ -20,7 +20,7 @@ function iResults() {
     this.data = '';
     this.rawJSON = '';
     this.inform = new Divider('iResults');
-    this.inform.print('New Result Set');
+//    this.inform.print('New Result Set');
     total++;
 };
 exports.iResults = iResults;
@@ -52,14 +52,15 @@ iResults.prototype.capture = function (data) {
 iResults.prototype.parse = function () {
     var self = this;
     complete++;
-    self.stats();
+//    self.stats();
     var success = 1;
     try
     {
         self.rawJSON= JSON.parse(self.glob);
         self.data = self.rawJSON.results[0];
         self.hits= self.rawJSON.resultCount;
-        self.inform.print('iResults.parse JSON: ' + JSON.stringify(this.data));
+        // Uncomment to validate API data.
+        //self.inform.print('iResults.parse JSON: ' + JSON.stringify(this.data));
     }
     catch (err)
     {

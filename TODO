@@ -1,0 +1,10 @@
+To Do:
+-----
+* Update for Node. 0.4.1
+* Add more winston logging
+  - use file and console transport simultaneously
+* Make installable via npm
+* Add Last.fm API
+* Add Amazon API
+* Add 7Digital API
+* Add that lyrics API service... what was it?

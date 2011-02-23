@@ -3,6 +3,8 @@
  * Simple stopwatch like class.  I noticed that the requests seemed to lag.
  * Now I can easily monitor how much they are lagging without clouding up
  * my code.
+ *
+ * 'inform' lines can be uncommented for timing debugging purposes. 
  * 
  */
 require.paths.unshift(require('path').join(__dirname));
@@ -14,7 +16,7 @@ function Timer(name) {
     this.bigBang = this.date.getTime();
     this.lastTime = 0;
     this.name = name;
-    this.inform = new Divider('Timer');
+//    this.inform = new Divider('Timer');
 };
 exports.Timer = Timer;
 
@@ -29,6 +31,6 @@ Timer.prototype.elapsed = function( phase ) {
     var nowMills = now.getTime();
     var elapsedMills = nowMills - this.lastTime;
     var elapsedSeconds = elapsedMills / millsPerSecond;
-    this.inform.print(this.name +  ' - ' + phase + ' elapsed : ' + elapsedSeconds);
+ //   this.inform.print(this.name +  ' - ' + phase + ' elapsed : ' + elapsedSeconds);
     return elapsedSeconds;
 };

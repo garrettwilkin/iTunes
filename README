@@ -4,7 +4,7 @@ Authored by Garrett Wilkin (http://geethink.com/blog)
 
 It uses both the iTunes API for retrieving media information and the LinkShare API for generating affiliate links to the iTunes store. See an example in simple-node.js.
 
-Currently, the iTunes API is implemented and tested for searching for album information.  See an example in simple-node.js.  A callback function is required in order to use this package.  The basic steps to using it are:
+Currently, the iTunes API is implemented and tested for searching for album information.  A callback function is required in order to use this package.  The basic steps to using it are:
 
 1. Decide that you want to retrieve some media meta data (only albums supported currently)
 2. Write a function to process this meta data (display it, store it in a database etc.)
@@ -13,6 +13,7 @@ Currently, the iTunes API is implemented and tested for searching for album info
 
 A very basic use:
 
+----------------------------------------------------------
 
   var itunesClient = new iTunes();
   itunesClient.lookupAlbum({artist: 'Smashing Pumpkins', album: 'Siamese Dream'}, function(error, album) {
@@ -20,19 +21,32 @@ A very basic use:
      }
   );
 
+----------------------------------------------------------
+
+This library also includes the ability to generate tracking URLs via linkshare.
+
+A very basic use of the LinkShare library:
+
+----------------------------------------------------------
+
+  // Take your unique linkshare ID credential
+  var token = '61513f782d1448d3e722acf3cd42a8a6bd7ac710b4badea2f1be0a685bd1b85e';
+
+  // Use the iTunes merchant ID
+  var merchantId = '13508';
+
+  // pass these values to the LinkShare constructor with a previously queried iTunes store URL.
+  var linkshare = new LinkShare(token,merchantId,track.itunesLink);
+
+  // Now fire off a request to the linkshare API.  Supply your own callback function.
+  linkshare.getLink(function(link) {
+    console.log('LinkShare URL: ' + link);
+  });
+
+----------------------------------------------------------
+
 See simple-node.js for a practical  example implementation of the libraries.
 
 Dependencies
 ------------
 Winston - git://github.com/indexzero/winston.git
-
-To Do:
------
-* Update for Node. 0.4.1
-* Add more winston logging
-  - use file and console transport simultaneously
-* Make installable via npm
-* Add Last.fm API
-* Add Amazon API
-* Add 7Digital API
-* Add that lyrics API service... what was it?
