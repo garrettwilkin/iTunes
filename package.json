@@ -1,14 +1,21 @@
 {
   "name":"itunes",
   "description":"An implementation of the iTunes API in NodeJS",
+  "keywords":["itunes","music"],
   "version":"0.0.1",
   "author":"Garrett Wilkin <garrett.wilkin@gmail.com>",
-  "keywords":["itunes","music"],
+  "repository":
+   { "type":"git",
+     "url":"git://github.com/garrettwilkin/iTunes.git"
+   },
+  "bugs" :
+  { "mail":"garrett.wilkin@gmail.com"
+  },
+  "main":"itunes",
   "dependencies": {
     "winston":">= 0.2.3",
     "vows":">= 0.5.2"
   },
-  "main":"itunes.js",
-  "scripts": { "test":"vows tests/*"},
-  "engines":{"node":">= 0.4.1"}
+  "engines":{"node":">= 0.4.1"},
+  "scripts": { "test":"vows tests/*"}
 }
