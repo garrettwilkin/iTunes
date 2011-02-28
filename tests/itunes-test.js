@@ -1,4 +1,4 @@
-require.paths.unshift(require('path').join(__dirname, '..'));
+require.paths.unshift(require('path').join(__dirname, '..','../util'));
 
 var vows = require('vows');
     assert = require('assert');

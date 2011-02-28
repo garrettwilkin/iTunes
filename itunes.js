@@ -6,7 +6,6 @@
  * 
  * 
  */
-
 require.paths.unshift(require('path').join(__dirname));
 
 var http = require('http');
@@ -48,32 +47,13 @@ function iTunes() {
     this.server = 'ax.itunes.apple.com';
     this.inform = new Divider('iTunes');
 };
-function iTunes(artist,album) {
-    this.params = new iParameters();
-    this.basePath = '/WebObjects/MZStoreServices.woa/wa/wsSearch?';
-    this.server = 'ax.itunes.apple.com';
-    this.inform = new Divider('iTunes');
-};
 exports.iTunes = iTunes;
 
-
-/*
- Must be rewritten to support MetaMedia class.
-iTunes.prototype.getArtist = function(artist) {
-   this.params.term = artist.replace(/ /g,'+');
-   this.params.entity = 'musicArtist';
-   this.params.attribute= 'artistTerm';
-   this.params.media = 'music';
-   this.request('itunes',this.params.term)
-};
-*/
-
 // Converts class' parameters JSON to a query string.
-// uncomment inform statements for debugging query string.
 iTunes.prototype.getQuery = function() {
-//    this.inform.print(JSON.stringify(this.params));
+    //this.inform.print(JSON.stringify(this.params));
     var query = querystring.stringify(this.params);
-//    this.inform.print('QUERY : ' + query);
+    //this.inform.print('QUERY : ' + query);
     return query;
 };
 
@@ -112,7 +92,7 @@ iTunes.prototype.request = function(dataType, callback) {
 };
 
 /*
- As the request to the iTunes store completes, this function is called to process that response.  It passes the job of parsing the results off to the iResults class.  It then determines what type of object should be passed to the callback function based on the dataType requested by they user.
+ As the request to the iTunes store completes, this function is called to process that response.  It passes the job of parsing the results off to the iResults class.  It then determines what type of object should be passed to the callback function based on the dataType requested by they user. The idea here is that in the future, additional objects other than albums will be supported.  That future planning makes dataType necessary.
  */
 
 iTunes.prototype.responseEnd = function(dataType, results, callback) {
@@ -150,7 +130,7 @@ iTunes.prototype.lookupAlbum = function(params, callback) {
     var self = this;
     var artist = params.artist;
     var album = params.album;
-    self.inform.print('artist: ' + artist + ' album: ' + album);  
+    self.inform.print('lookupAlbum artist: ' + artist + ' album: ' + album);  
     self.params.media='music';
     self.params.entity='album';
     self.params.attribute='albumTerm';

@@ -1,11 +1,8 @@
 /*
- * 
- * iTunes interface for Node.js
- * Author: Garrett Wilkin 
- * Date  : 2011/1/7 
- * 
- * 
+ * Author: Garrett Wilkin garrett.wilkin@gmail.com @garrettwilkin geethink.com/blog
+ * Simple demonstration of the iTunes class. 
  */
+
 require.paths.unshift(require('path').join(__dirname, '..','util'));
 
 var Divider = require('divider').Divider;
@@ -17,7 +14,9 @@ var LinkShare = require('linkshare').LinkShare;
  */
 
 inform = new Divider('Demo');
-inform.print('iTunes API Implementation in node.js');
+inform.print('Use of LinkShare WebServices API for generating referral links for iTunes albums.');
+inform.print('Valid linkshare Web Services Token required.');
+
 
 function Track(artist, album) {
     this.artist = artist;

@@ -4,10 +4,10 @@
  * specific attributes.
  */
 
-require.paths.unshift(require('path').join(__dirname));
+require.paths.unshift(require('path').join(__dirname,'./util'));
 
-var Divider = require('divider.js').Divider;
-var Album = require('album.js').Album;
+var Divider = require('divider').Divider;
+var Album = require('album').Album;
 
 //Track total and completed instances of the class for debugging purposes.
 var total = 0;

@@ -1,11 +1,8 @@
 /*
- * 
- * iTunes interface for Node.js
- * Author: Garrett Wilkin 
- * Date  : 2011/1/7 
- * 
- * 
+ * Author: Garrett Wilkin garrett.wilkin@gmail.com @garrettwilkin geethink.com/blog
+ * Simple demonstration of the iTunes class. 
  */
+
 require.paths.unshift(require('path').join(__dirname, '..','util'));
 
 var Divider = require('divider').Divider;
@@ -25,36 +22,24 @@ function Track(artist, album) {
 };
 
 /*
- Example use case: retrieving a iTunes store link for a particular album.
- ------------------------------
-*/
-
-function getStoreLink(track) {
-    itunesClient.lookupAlbum({artist: track.artist, album: track.album}, function(error, album) {
-        if (error) {
-            inform.print('there was an error');
-        } else {
-            track.itunesLink = album.storeUrl;
-            inform.print(track.itunesLink);
-        }
-    });
-}
-
-/*
  Example of reusing the iTunes object four times.
 */
 
 function getAlbumStoreLinks() {
     var itunesClient = new iTunes();
+
+    //Defining my callback function ahead of time
+    function handleAlbum(error, album) {
+        if (error) {
+            inform.print('there was an error');
+        } else {
+            var itunesLink = album.storeUrl;
+            inform.print('Retrieved this iTunes store link: ' + itunesLink);
+        }
+    }
+
     function getStoreLink(track) {
-        itunesClient.lookupAlbum({artist: track.artist, album: track.album}, function(error, album) {
-            if (error) {
-                inform.print('there was an error');
-            } else {
-                track.itunesLink = album.storeUrl;
-                inform.print(track.itunesLink);
-            }
-        });
+        itunesClient.lookupAlbum({artist: track.artist, album: track.album}, handleAlbum);
     }
 
     var track1 = new Track('Miles Davis','Kind of Blue');
@@ -62,6 +47,7 @@ function getAlbumStoreLinks() {
     var track3 = new Track('Aerosmith','Get a Grip');
     var lastTrack = new Track('Beastie Boys','Pauls Boutique');
 
+    inform.print('About to fire off album requests!');
     var tracks = [track1,
                   track2,
                   track3,
@@ -70,6 +56,7 @@ function getAlbumStoreLinks() {
     {
         getStoreLink(tracks[i]);
     };
+    inform.print('All album requests fired! Now we wait till the callbacks come home.');
 
 };
 

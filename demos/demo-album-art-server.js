@@ -12,6 +12,12 @@ var url = require('url');
 var iTunes = require('itunes').iTunes;
 var LinkShare = require('linkshare').LinkShare;
 
+var Divider = require('divider').Divider;
+inform = new Divider('Demo');
+inform.print('Simple webserver implementation making use of iTunes and Linkshare libraries.');
+inform.print('Valid linkshare Web Services Token required.');
+inform.print('Point a web browser to http://localhost:8005/test to start the test.');
+
 var lastPath = '';
 
 function Track(artist, album) {
