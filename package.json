@@ -12,6 +12,10 @@
   { "mail":"garrett.wilkin@gmail.com"
   },
   "main":"itunes",
+  "directories":
+   { "demos" : "./demos",
+     "util":"./util"
+   },
   "dependencies": {
     "winston":">= 0.2.3",
     "vows":">= 0.5.2"
