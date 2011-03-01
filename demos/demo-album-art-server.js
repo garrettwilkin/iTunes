@@ -2,7 +2,7 @@
  * Author: Garrett Wilkin garrett.wilkin@gmail.com @garrettwilkin geethink.com/blog
  * A simple webserver that demonstrates practical use of the iTunes library.
  * Currently it looks up the album art for several hard coded albums.
- * Run "node simple-node.js" and point your browser to 'localhost:8005/woot'.
+ * Point your browser to 'localhost:8005/test'.
  */
 
 require.paths.unshift(require('path').join(__dirname, '..','util'));
@@ -10,12 +10,10 @@ require.paths.unshift(require('path').join(__dirname, '..','util'));
 var http = require('http');
 var url = require('url');
 var iTunes = require('itunes').iTunes;
-var LinkShare = require('linkshare').LinkShare;
 
 var Divider = require('divider').Divider;
 inform = new Divider('Demo');
 inform.print('Simple webserver implementation making use of iTunes and Linkshare libraries.');
-inform.print('Valid linkshare Web Services Token required.');
 inform.print('Point a web browser to http://localhost:8005/test to start the test.');
 
 var lastPath = '';
@@ -39,11 +37,8 @@ function showArt(response) {
                 var artyLinky = imgCode;
                 var token = '51513f78fd1448d3e722ccf3cd4d79d5af7ac710b4badea2f1bd0a685bd2b85e';
                 var merchantId = '13508';
-                var linkshare = new LinkShare(token,merchantId,album.storeUrl);
-                linkshare.getLink(function(link) {
-                    artyLinky = '<a href="' + link + '">' + artyLinky + '<a>'
-                    response.write(artyLinky);
-                });
+                var artyLinky = '<a href="' + album.storeUrl + '">' + artyLinky + '<a>'
+                response.write(artyLinky);
             };
         });
     }

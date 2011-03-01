@@ -9,7 +9,6 @@
 require.paths.unshift(require('path').join(__dirname));
 
 var http = require('http');
-var Divider = require('divider').Divider;
 var Timer = require('timer').Timer;
 
 /*

@@ -12,7 +12,6 @@ var http = require('http');
 var iResults= require('iresults').iResults;
 var Timer = require('timer').Timer;
 var querystring = require('querystring');
-var Divider = require('divider').Divider;
 
 /*
  * 
@@ -45,15 +44,12 @@ function iTunes() {
     this.params = new iParameters();
     this.basePath = '/WebObjects/MZStoreServices.woa/wa/wsSearch?';
     this.server = 'ax.itunes.apple.com';
-    this.inform = new Divider('iTunes');
 };
 exports.iTunes = iTunes;
 
 // Converts class' parameters JSON to a query string.
 iTunes.prototype.getQuery = function() {
-    //this.inform.print(JSON.stringify(this.params));
     var query = querystring.stringify(this.params);
-    //this.inform.print('QUERY : ' + query);
     return query;
 };
 
@@ -72,8 +68,6 @@ iTunes.prototype.request = function(dataType, callback) {
     var apple = http.createClient(80,self.server);
     var query = self.getQuery();
     var path = self.basePath + query;
-//    self.inform.print('SERVER: ' + self.server);
-//    self.inform.print('PATH: ' + path);
     var request = apple.request('GET',path,{host:self.server});
     apple.request('GET',path);
     request.end();
@@ -104,7 +98,6 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
         {
         case 'album':
             if (results.hits > 1) {
-                self.inform.print('Multiple results, cant choose');
             } else {
                 data = results.getAlbum();
             };
@@ -112,7 +105,6 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
         case 'raw':
             data = results.data; // returns JSON for full results
         default:
-            self.inform.print('Unknown dataType.  Returning error.');
             error = 1;
         }
     } else {
@@ -130,7 +122,6 @@ iTunes.prototype.lookupAlbum = function(params, callback) {
     var self = this;
     var artist = params.artist;
     var album = params.album;
-    self.inform.print('lookupAlbum artist: ' + artist + ' album: ' + album);  
     self.params.media='music';
     self.params.entity='album';
     self.params.attribute='albumTerm';

@@ -6,7 +6,6 @@
 
 require.paths.unshift(require('path').join(__dirname,'./util'));
 
-var Divider = require('divider').Divider;
 var Album = require('album').Album;
 
 //Track total and completed instances of the class for debugging purposes.
@@ -19,15 +18,13 @@ function iResults() {
     this.numGlobs = 0;
     this.data = '';
     this.rawJSON = '';
-    this.inform = new Divider('iResults');
-//    this.inform.print('New Result Set');
     total++;
 };
 exports.iResults = iResults;
 
 //Debugging function.
 iResults.prototype.stats = function () {
-   this.inform.print('Completed result sets: ' + complete + '/' + total);
+   return {"complete":complete, "total":total}
 };
 
 //Builds the intermediary string of results returned by the iTunes web service in pieces.
@@ -59,16 +56,12 @@ iResults.prototype.parse = function () {
         self.rawJSON= JSON.parse(self.glob);
         self.data = self.rawJSON.results[0];
         self.hits= self.rawJSON.resultCount;
-        // Uncomment to validate API data.
-        //self.inform.print('iResults.parse JSON: ' + JSON.stringify(this.data));
     }
     catch (err)
     {
-        self.inform.print('iResults.parse: error while parsing JSON \n' + self.glob);
         success = 0;
     }
     if (self.data == 'undefined') {
-        self.inform.print('Parse error.  First element of results array is undefined');
     }
     return success;
 };
@@ -86,7 +79,6 @@ iResults.prototype.getAlbum = function() {
                               this.data.artworkUrl60,
                               this.data.artworkUrl100);
     } else {
-        this.inform.print('We did not parse an album set: ' + this.data.wrapperType + ' | ' + this.data.collectionType );
     }
     return album;
 };
