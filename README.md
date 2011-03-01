@@ -21,26 +21,4 @@ A very basic use:
     );
 
 
-This library also includes the ability to generate tracking URLs via linkshare.
-
-A very basic use of the LinkShare library:
-
-    // Take your unique linkshare ID credential
-    var token = '61513f782d1448d3e722acf3cd42a8a6bd7ac710b4badea2f1be0a685bd1b85e';
-
-    // Use the iTunes merchant ID
-    var merchantId = '13508';
-
-    // pass these values to the LinkShare constructor with a previously queried iTunes store URL.
-    var linkshare = new LinkShare(token,merchantId,track.itunesLink);
-
-    // Now fire off a request to the linkshare API.  Supply your own callback function.
-    linkshare.getLink(function(link) {
-      console.log('LinkShare URL: ' + link);
-    });
-
 See demo files for a practical examples of the libraries in action.
-
-Dependencies
-------------
-Winston - git://github.com/indexzero/winston.git
