@@ -13,7 +13,6 @@
   },
   "main":"itunes",
   "dependencies": {
-    "winston":">= 0.2.3",
     "vows":">= 0.5.2"
   },
   "engines":{"node":">= 0.4.1"},
