@@ -15,7 +15,7 @@
   "dependencies": {
     "vows":">= 0.5.2"
   },
-  "engines":{"node":">= 0.4.1"},
+  "engines":{"node":">= 0.4.0"},
   "scripts": 
    { "test":"vows tests/*",
      "demo_1":"node demo-itunes.js",
