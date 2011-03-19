@@ -107,7 +107,7 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
                 console.log('iTunes.responseEnd : ' + dataType + ' : too many results');
             } else {
                 console.log('iTunes.responseEnd : ' + dataType + ' 1 hit!');
-                data = results.getAlbum();
+                data = results.getTrack();
             };
             break;
         case 'raw':
@@ -144,6 +144,6 @@ iTunes.prototype.lookupTrack = function(params, callback) {
     self.params.media='music';
     self.params.entity='musicTrack';
     self.params.attribute='musicTrackTerm';
-    self.params.term=album;
+    self.params.term = track;
     self.request('track',callback);
 }
