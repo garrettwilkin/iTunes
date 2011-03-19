@@ -90,16 +90,15 @@ iResults.prototype.getAlbum = function() {
 iResults.prototype.getTrack = function() {
     var track = '';
     console.log('iResults.prototype.getTrack : data ' + JSON.stringify(this.data));
-        /*
-    if (this.data.wrapperType == 'collection' && this.data.collectionType == 'Track') {
-        var track = new Track(this.data.collectionViewUrl,
-                              this.data.amgArtistId, 
-                              this.data.artistId, 
-                              this.data.collectionName,
+    if (this.data.wrapperType == 'track' && this.data.kind == 'song') {
+        var track = new Track(this.data.trackName,
+                              this.data.trackId, 
+                              this.data.trackViewUrl, 
+                              this.data.artistId,
                               this.data.artworkUrl60,
-                              this.data.artworkUrl100);
+                              this.data.artworkUrl100,
+                              this.data.artistName);
     } else {
     }
-        */
     return track;
 };
