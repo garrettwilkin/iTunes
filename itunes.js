@@ -104,9 +104,9 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
             break;
         case 'track':
             if (results.hits > 1) {
-                console.log('iTunes.responseEnd : ' + dataType + ' : too many results');
+                //console.log('iTunes.responseEnd : ' + dataType + ' : too many results');
             } else {
-                console.log('iTunes.responseEnd : ' + dataType + ' 1 hit!');
+                //console.log('iTunes.responseEnd : ' + dataType + ' 1 hit!');
                 data = results.getTrack();
             };
             break;

@@ -89,7 +89,6 @@ iResults.prototype.getAlbum = function() {
  */
 iResults.prototype.getTrack = function() {
     var track = '';
-    console.log('iResults.prototype.getTrack : data ' + JSON.stringify(this.data));
     if (this.data.wrapperType == 'track' && this.data.kind == 'song') {
         var track = new Track(this.data.trackName,
                               this.data.trackId, 
