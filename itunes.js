@@ -102,6 +102,14 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
                 data = results.getAlbum();
             };
             break;
+        case 'track':
+            if (results.hits > 1) {
+                console.log('iTunes.responseEnd : ' + dataType + ' : too many results');
+            } else {
+                console.log('iTunes.responseEnd : ' + dataType + ' 1 hit!');
+                data = results.getAlbum();
+            };
+            break;
         case 'raw':
             data = results.data; // returns JSON for full results
         default:
@@ -128,3 +136,14 @@ iTunes.prototype.lookupAlbum = function(params, callback) {
     self.params.term=album;
     self.request('album',callback);
 };
+
+iTunes.prototype.lookupTrack = function(params, callback) {
+    var self = this;
+    var artist = params.artist;
+    var track = params.track;
+    self.params.media='music';
+    self.params.entity='musicTrack';
+    self.params.attribute='musicTrackTerm';
+    self.params.term=album;
+    self.request('track',callback);
+}
