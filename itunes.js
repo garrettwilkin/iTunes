@@ -98,6 +98,9 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
         {
         case 'album':
             if (results.hits > 1) {
+                error = 1;
+            } else if ( results.hits == 0)  {
+                error = 1;
             } else {
                 data = results.getAlbum();
             };
@@ -105,6 +108,9 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
         case 'track':
             if (results.hits > 1) {
                 //console.log('iTunes.responseEnd : ' + dataType + ' : too many results');
+                error = 1;
+            } else if ( results.hits == 0)  {
+                error = 1;
             } else {
                 //console.log('iTunes.responseEnd : ' + dataType + ' 1 hit!');
                 data = results.getTrack();
