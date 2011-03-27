@@ -103,6 +103,16 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
                 error = 1;
             } else {
                 data = results.getAlbum();
+                console.dir(results);
+            };
+            break;
+        case 'artist':
+            if (results.hits > 1) {
+                error = 1;
+            } else if ( results.hits == 0)  {
+                error = 1;
+            } else {
+                data = results.getArtist();
             };
             break;
         case 'track':
@@ -141,6 +151,16 @@ iTunes.prototype.lookupAlbum = function(params, callback) {
     self.params.attribute='albumTerm';
     self.params.term=album;
     self.request('album',callback);
+};
+
+iTunes.prototype.lookupArtist = function(params, callback) {
+    var self = this;
+    var artist = params.artist;
+    self.params.media='music';
+    self.params.entity='musicArtist';
+    self.params.attribute='artistTerm';
+    self.params.term=artist;
+    self.request('artist',callback);
 };
 
 iTunes.prototype.lookupTrack = function(params, callback) {
