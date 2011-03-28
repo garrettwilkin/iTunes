@@ -5,6 +5,8 @@ var vows = require('vows');
     querystring = require('querystring');
     iTunes = require('itunes').iTunes;
     Album = require('album').Album;
+    Track = require('track').Track;
+    Artist = require('artist').Artist;
 
 
 var suite = vows.describe('itunes')
@@ -27,6 +29,42 @@ var suite = vows.describe('itunes')
             },
             'Returns Album': function(err,album) { //Vow
                 assert.instanceOf(album,Album);
+            }
+        },
+        'lookupTrack Object': {                     //Sub-Context
+        //Check to see that the asynchronous lookupTrack function returns an object.
+            topic : function () {                   //topic
+                new iTunes().lookupTrack({artist:'Smashing Pumpkins', track:'I Am One'},this.callback)
+            },
+            'Returns Object': function(err,track) { //Vow
+                assert.isObject(track);
+            }
+        },
+        'lookupTrack Track': {                      //Sub-Context
+        //Check to see that the asynchronous lookupTrack function returns an instance of the Track  object.
+            topic : function () {                   //topic
+                new iTunes().lookupTrack({artist:'Smashing Pumpkins', track:'I Am One'},this.callback)
+            },
+            'Returns Track': function(err,track) { //Vow
+                assert.instanceOf(track,Track);
+            }
+        },
+        'lookupArtist Object': {                     //Sub-Context
+        //Check to see that the asynchronous lookupArtist function returns an object.
+            topic : function () {                   //topic
+                new iTunes().lookupArtist({artist:'Smashing Pumpkins'},this.callback)
+            },
+            'Returns Object': function(err,artist) { //Vow
+                assert.isObject(artist);
+            }
+        },
+        'lookupArtist Artist': {                      //Sub-Context
+        //Check to see that the asynchronous lookupArtist function returns an instance of the Artist  object.
+            topic : function () {                   //topic
+                new iTunes().lookupArtist({artist:'Smashing Pumpkins'},this.callback)
+            },
+            'Returns Artist': function(err,artist) { //Vow
+                assert.instanceOf(artist,Artist);
             }
         },
         'Basic Components': {

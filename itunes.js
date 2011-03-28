@@ -103,7 +103,6 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
                 error = 1;
             } else {
                 data = results.getAlbum();
-                console.dir(results);
             };
             break;
         case 'artist':
