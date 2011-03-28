@@ -98,8 +98,22 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
         {
         case 'album':
             if (results.hits > 1) {
+                error = 1;
+            } else if ( results.hits == 0)  {
+                error = 1;
             } else {
                 data = results.getAlbum();
+            };
+            break;
+        case 'track':
+            if (results.hits > 1) {
+                //console.log('iTunes.responseEnd : ' + dataType + ' : too many results');
+                error = 1;
+            } else if ( results.hits == 0)  {
+                error = 1;
+            } else {
+                //console.log('iTunes.responseEnd : ' + dataType + ' 1 hit!');
+                data = results.getTrack();
             };
             break;
         case 'raw':
@@ -128,3 +142,14 @@ iTunes.prototype.lookupAlbum = function(params, callback) {
     self.params.term=album;
     self.request('album',callback);
 };
+
+iTunes.prototype.lookupTrack = function(params, callback) {
+    var self = this;
+    var artist = params.artist;
+    var track = params.track;
+    self.params.media='music';
+    self.params.entity='musicTrack';
+    self.params.attribute='musicTrackTerm';
+    self.params.term = track;
+    self.request('track',callback);
+}

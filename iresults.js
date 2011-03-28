@@ -7,6 +7,7 @@
 require.paths.unshift(require('path').join(__dirname,'./util'));
 
 var Album = require('album').Album;
+var Track = require('track').Track;
 
 //Track total and completed instances of the class for debugging purposes.
 var total = 0;
@@ -81,4 +82,22 @@ iResults.prototype.getAlbum = function() {
     } else {
     }
     return album;
+};
+
+/*
+ Extracts a few items from the iTunes results for an album search and returns them in an object.
+ */
+iResults.prototype.getTrack = function() {
+    var track = '';
+    if (this.data.wrapperType == 'track' && this.data.kind == 'song') {
+        var track = new Track(this.data.trackName,
+                              this.data.trackId, 
+                              this.data.trackViewUrl, 
+                              this.data.artistId,
+                              this.data.artworkUrl60,
+                              this.data.artworkUrl100,
+                              this.data.artistName);
+    } else {
+    }
+    return track;
 };
