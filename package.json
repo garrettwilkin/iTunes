@@ -2,7 +2,7 @@
   "name":"itunes",
   "description":"An implementation of the iTunes API in NodeJS",
   "keywords":["itunes","music"],
-  "version":"0.0.1",
+  "version":"0.0.3",
   "author":"Garrett Wilkin <garrett.wilkin@gmail.com>",
   "repository":
    { "type":"git",
