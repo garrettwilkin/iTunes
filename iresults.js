@@ -7,6 +7,7 @@
 require.paths.unshift(require('path').join(__dirname,'./util'));
 
 var Album = require('album').Album;
+var Artist = require('artist').Artist;
 var Track = require('track').Track;
 
 //Track total and completed instances of the class for debugging purposes.
@@ -83,6 +84,24 @@ iResults.prototype.getAlbum = function() {
     }
     return album;
 };
+
+
+/*
+ Extracts a few items from the iTunes results for an artist search and returns them in an object.
+ */
+iResults.prototype.getArtist = function() {
+    var artist = '';
+    if (this.data.wrapperType == 'artist') {
+        var artist = new Artist(this.data.artistLinkUrl,
+                              this.data.amgArtistId,
+                              this.data.artistId,
+                              this.data.artistName);
+    } else {
+    }
+    return artist;
+};
+
+
 
 /*
  Extracts a few items from the iTunes results for an album search and returns them in an object.
