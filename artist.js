@@ -1,7 +1,6 @@
 /*
  Simple object to hold Artist information.  This is included just for ease of understanding getArtist.
  */
-require.paths.unshift(require('path').join(__dirname));
 
 function Artist(storeUrl, amgArtistId, itunesArtistId, artistName) {
     this.storeUrl = storeUrl;

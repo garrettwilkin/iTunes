@@ -7,9 +7,8 @@
  * 'inform' lines can be uncommented for timing debugging purposes. 
  * 
  */
-require.paths.unshift(require('path').join(__dirname));
 
-var Divider = require('divider').Divider;
+var Divider = require('./divider').Divider;
 
 function Timer(name) {
     this.date = new Date();

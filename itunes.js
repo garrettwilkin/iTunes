@@ -6,11 +6,9 @@
  * 
  * 
  */
-require.paths.unshift(require('path').join(__dirname));
-
 var http = require('http');
-var iResults= require('iresults').iResults;
-var Timer = require('timer').Timer;
+var iResults= require('./iresults').iResults;
+var Timer = require('./util/timer').Timer;
 var querystring = require('querystring');
 
 /*

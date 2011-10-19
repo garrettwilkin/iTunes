@@ -1,7 +1,6 @@
 /*
  Simple object to hold Album information.  This is included just for ease of understanding getAlbum.
  */
-require.paths.unshift(require('path').join(__dirname));
 
 function Album(storeUrl, amgArtistId, itunesArtistId, name, artworkUrl60, artworkUrl100) {
     this.storeUrl = storeUrl;

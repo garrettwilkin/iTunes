@@ -1,7 +1,6 @@
 /*
  Simple object to hold Track information.  This is included just for ease of understanding getTrack.
  */
-require.paths.unshift(require('path').join(__dirname));
 
 function Track( trackName, trackId, trackViewUrl, artistId, artworkUrl60, artworkUrl100, artistName) {
     this.name = trackName;

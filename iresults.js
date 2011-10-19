@@ -4,11 +4,9 @@
  * specific attributes.
  */
 
-require.paths.unshift(require('path').join(__dirname,'./util'));
-
-var Album = require('album').Album;
-var Artist = require('artist').Artist;
-var Track = require('track').Track;
+var Album = require('./album').Album;
+var Artist = require('./artist').Artist;
+var Track = require('./track').Track;
 
 //Track total and completed instances of the class for debugging purposes.
 var total = 0;

@@ -2,7 +2,6 @@
  * 
  * Abstraction layer for logging.
  */
-require.paths.unshift(require('path').join(__dirname));
 
 function Divider(label) {
    this.label = label;
