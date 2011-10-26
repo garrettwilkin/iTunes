@@ -1,12 +1,10 @@
-require.paths.unshift(require('path').join(__dirname, '..','../util'));
-
 var vows = require('vows');
     assert = require('assert');
     querystring = require('querystring');
-    iTunes = require('itunes').iTunes;
-    Album = require('album').Album;
-    Track = require('track').Track;
-    Artist = require('artist').Artist;
+    iTunes = require('../itunes').iTunes;
+    Album = require('../album').Album;
+    Track = require('../track').Track;
+    Artist = require('../artist').Artist;
 
 
 var suite = vows.describe('itunes')
