@@ -17,7 +17,7 @@
      "util":"./util"
    },
   "dependencies": {
-    "vows":">= 0.5.2"
+    "vows":">= 0.5.11"
   },
   "engines":{"node":">= 0.4.0"},
   "scripts": 

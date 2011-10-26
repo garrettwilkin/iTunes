@@ -1,7 +1,7 @@
 var vows = require('vows');
     assert = require('assert');
     querystring = require('querystring');
-    iTunes = require('../itunes').iTunes;
+    iTunes = require('../itunes.js').iTunes;
     Album = require('../album').Album;
     Track = require('../track').Track;
     Artist = require('../artist').Artist;
@@ -17,6 +17,7 @@ var suite = vows.describe('itunes')
                 new iTunes().lookupAlbum({artist:'Smashing Pumpkins', album:'Gish'},this.callback)
             },
             'Returns Object': function(err,album) { //Vow
+                assert.isNull(err);
                 assert.isObject(album);
             }
         },
@@ -26,6 +27,7 @@ var suite = vows.describe('itunes')
                 new iTunes().lookupAlbum({artist:'Smashing Pumpkins', album:'Gish'},this.callback)
             },
             'Returns Album': function(err,album) { //Vow
+                assert.isNull(err);
                 assert.instanceOf(album,Album);
             }
         },
@@ -35,6 +37,7 @@ var suite = vows.describe('itunes')
                 new iTunes().lookupTrack({artist:'Smashing Pumpkins', track:'I Am One'},this.callback)
             },
             'Returns Object': function(err,track) { //Vow
+                assert.isNull(err);
                 assert.isObject(track);
             }
         },
@@ -44,9 +47,10 @@ var suite = vows.describe('itunes')
                 new iTunes().lookupTrack({artist:'Smashing Pumpkins', track:'I Am One'},this.callback)
             },
             'Returns Track': function(err,track) { //Vow
-                if {$track != '' } {
+                assert.isNull(err);
+                if (track != '' ) {
                     assert.instanceOf(track,Track);
-                } else if {
+                } else {
                     assert.equal('',track, 'LookupTrack doesnt return string or track.');
                 }
             }
@@ -57,7 +61,7 @@ var suite = vows.describe('itunes')
                 new iTunes().lookupTrack({artist:'The Eels', track:'The Dog Faced Boy'},this.callback)
             },
             'Track is by artist in query 1': function(err,track) { //Vow
-                assert.equal('The Eels',track.artist, 'Artists are not equal, expected \'The Eels\' received ' + track.artist );
+                assert.equal('The Eels',track.artist);
             }
         },
         'lookupTrack Track Duplicate 2': {                      //Sub-Context
@@ -66,10 +70,8 @@ var suite = vows.describe('itunes')
                 new iTunes().lookupTrack({artist:'Corinne Bailey Rae', track:'Like A Star'},this.callback)
             },
             'Track is in query 2': function(err,track) { //Vow
-                assert.equal('Corinne Bailey Rae',track.artist, 'Artists are not equal, expected \'Corinne Bailey Rae\' received ' + track.artist );
-            }
-            'Track is by artist in query 2': function(err,track) { //Vow
-                assert.equal('Corinne Bailey Rae',track.artist, 'Artists are not equal, expected \'Corinne Bailey Rae\' received ' + track.artist );
+                assert.isNull(err);
+                assert.equal('Corinne Bailey Rae',track.artist);
             }
         },
         'lookupArtist Object': {                     //Sub-Context
@@ -78,6 +80,7 @@ var suite = vows.describe('itunes')
                 new iTunes().lookupArtist({artist:'Smashing Pumpkins'},this.callback)
             },
             'Returns Object': function(err,artist) { //Vow
+                assert.isNull(err);
                 assert.isObject(artist);
             }
         },
@@ -87,6 +90,7 @@ var suite = vows.describe('itunes')
                 new iTunes().lookupArtist({artist:'Smashing Pumpkins'},this.callback)
             },
             'Returns Artist': function(err,artist) { //Vow
+                assert.isNull(err);
                 assert.instanceOf(artist,Artist);
             }
         },
