@@ -12,7 +12,7 @@ var suite = vows.describe('itunes')
     'iTunes Object': {                              //Context
     //Make vows on the iTunes class
         'lookupAlbum Object': {                     //Sub-Context
-        //Check to see that the asynchronous lookupAlbum function returns an object.
+        //lookupAlbum function returns an object.
             topic : function () {                   //topic
                 new iTunes().lookupAlbum({artist:'Smashing Pumpkins', album:'Gish'},this.callback)
             },
@@ -21,7 +21,7 @@ var suite = vows.describe('itunes')
             }
         },
         'lookupAlbum Album': {                      //Sub-Context
-        //Check to see that the asynchronous lookupAlbum function returns an instance of the Album  object.
+        //lookupAlbum an instance of the Album object.
             topic : function () {                   //topic
                 new iTunes().lookupAlbum({artist:'Smashing Pumpkins', album:'Gish'},this.callback)
             },
@@ -30,7 +30,7 @@ var suite = vows.describe('itunes')
             }
         },
         'lookupTrack Object': {                     //Sub-Context
-        //Check to see that the asynchronous lookupTrack function returns an object.
+        //lookupTrack function returns an object.
             topic : function () {                   //topic
                 new iTunes().lookupTrack({artist:'Smashing Pumpkins', track:'I Am One'},this.callback)
             },
@@ -38,17 +38,42 @@ var suite = vows.describe('itunes')
                 assert.isObject(track);
             }
         },
-        'lookupTrack Track': {                      //Sub-Context
-        //Check to see that the asynchronous lookupTrack function returns an instance of the Track  object.
+        'lookupTrack Track Unique': {                      //Sub-Context
+        //lookupTrack returns an instance of the Track  object.
             topic : function () {                   //topic
                 new iTunes().lookupTrack({artist:'Smashing Pumpkins', track:'I Am One'},this.callback)
             },
             'Returns Track': function(err,track) { //Vow
-                assert.instanceOf(track,Track);
+                if {$track != '' } {
+                    assert.instanceOf(track,Track);
+                } else if {
+                    assert.equal('',track, 'LookupTrack doesnt return string or track.');
+                }
+            }
+        },
+        'lookupTrack Track Duplicate 1': {                      //Sub-Context
+        //lookupTrack returns an instance of the Track  object.
+            topic : function () {                   //topic
+                new iTunes().lookupTrack({artist:'The Eels', track:'The Dog Faced Boy'},this.callback)
+            },
+            'Track is by artist in query 1': function(err,track) { //Vow
+                assert.equal('The Eels',track.artist, 'Artists are not equal, expected \'The Eels\' received ' + track.artist );
+            }
+        },
+        'lookupTrack Track Duplicate 2': {                      //Sub-Context
+        //lookupTrack returns an instance of the Track  object.
+            topic : function () {                   //topic
+                new iTunes().lookupTrack({artist:'Corinne Bailey Rae', track:'Like A Star'},this.callback)
+            },
+            'Track is in query 2': function(err,track) { //Vow
+                assert.equal('Corinne Bailey Rae',track.artist, 'Artists are not equal, expected \'Corinne Bailey Rae\' received ' + track.artist );
+            }
+            'Track is by artist in query 2': function(err,track) { //Vow
+                assert.equal('Corinne Bailey Rae',track.artist, 'Artists are not equal, expected \'Corinne Bailey Rae\' received ' + track.artist );
             }
         },
         'lookupArtist Object': {                     //Sub-Context
-        //Check to see that the asynchronous lookupArtist function returns an object.
+        //lookupArtist returns an object.
             topic : function () {                   //topic
                 new iTunes().lookupArtist({artist:'Smashing Pumpkins'},this.callback)
             },
@@ -57,7 +82,7 @@ var suite = vows.describe('itunes')
             }
         },
         'lookupArtist Artist': {                      //Sub-Context
-        //Check to see that the asynchronous lookupArtist function returns an instance of the Artist  object.
+        //lookupArtist returns an instance of the Artist object.
             topic : function () {                   //topic
                 new iTunes().lookupArtist({artist:'Smashing Pumpkins'},this.callback)
             },
