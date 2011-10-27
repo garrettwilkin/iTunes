@@ -83,11 +83,39 @@ iTunes.prototype.request = function(dataType, callback) {
     });
 };
 
+iTunes.prototype.processAlbum = function(results, callback) {
+    var error = null;
+    var data = null;
+    if (results.hits > 1) {
+        error = 1;
+        console.log('processAlbum hits > 1');
+    } else if ( results.hits == 0)  {
+        error = 1;
+        console.log('processAlbum hits == 0');
+    } else {
+        data = results.getAlbum();
+        console.log('processAlbum hits == 0');
+    };
+    callback(error,data);
+};
+
+iTunes.prototype.processArtist = function(results, callback) {
+    var error = null;
+    var data = null;
+    callback(error, data);
+};
+
+iTunes.prototype.processTrack = function(results, callback) {
+    var error = null;
+    var data = null;
+    callback(error, data);
+};
 /*
  As the request to the iTunes store completes, this function is called to process that response.  It passes the job of parsing the results off to the iResults class.  It then determines what type of object should be passed to the callback function based on the dataType requested by they user. The idea here is that in the future, additional objects other than albums will be supported.  That future planning makes dataType necessary.
  */
 
 iTunes.prototype.responseEnd = function(dataType, results, callback) {
+    console.log('responseEnd');
     var self = this;
     var error = null;
     var data = null;
@@ -95,13 +123,7 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
         switch(dataType)
         {
         case 'album':
-            if (results.hits > 1) {
-                error = 1;
-            } else if ( results.hits == 0)  {
-                error = 1;
-            } else {
-                data = results.getAlbum();
-            };
+            self.processAlbum(results,callback);
             break;
         case 'artist':
             if (results.hits > 1) {
@@ -127,11 +149,12 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
             data = results.data; // returns JSON for full results
         default:
             error = 1;
+            callback(error,data);
         }
     } else {
         error = 1;
+        callback(error,data);
     }
-    callback(error,data);
 };
 
 /*
