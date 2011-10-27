@@ -89,8 +89,8 @@ iTunes.prototype.request = function(dataType, callback) {
 
 iTunes.prototype.responseEnd = function(dataType, results, callback) {
     var self = this;
-    var error = 0;
-    var data = '';
+    var error = null;
+    var data = null;
     if (results.parse()) {
         switch(dataType)
         {
