@@ -5,7 +5,16 @@ var vows = require('vows');
     Album = require('../album').Album;
     Track = require('../track').Track;
     Artist = require('../artist').Artist;
+    iError = require('../ierror').iError;
 
+function assertError(e) {
+    if (e != null) {
+        console.log(e.message);
+    };
+    return function (e, res) {
+        assert.isNull(e);
+    }
+}
 
 var suite = vows.describe('itunes')
 .addBatch({                                         //Batch
@@ -18,13 +27,14 @@ var suite = vows.describe('itunes')
                                           album:'Gish'},
                                           this.callback)
             },
-            'Returns Album': function(err,album) { //Vow
+            'Returns album': function(err,album) { //Vow
                 assert.isNull(err);
+                assertError(err);
                 assert.isObject(album);
                 assert.instanceOf(album,Album);
             }
         },
-        'lookupTrack unique': {               //Sub-Context
+        'unique track': {                           //Sub-Context
             topic : function () {                   //topic
                 new iTunes().lookupTrack({artist:'Smashing Pumpkins',
                                           track:'I Am One'},
@@ -32,44 +42,50 @@ var suite = vows.describe('itunes')
             },
             'Returns Track': function(err,track) { //Vow
                 assert.isNull(err);
+                assertError(err);
+                assert.isNotNull(track);
                 assert.isObject(track);
-                if (track != '' ) {
-                    assert.instanceOf(track,Track);
-                } else {
-                    assert.equal('I Am One',track.name);
-                }
+                assert.instanceOf(track,Track);
+                assert.equal('I Am One',track.name);
             }
         },
-        'lookupTrack Duplicate 1': {          //Sub-Context
+        'duplicate track 1': {                      //Sub-Context
         //lookupTrack returns an instance of the Track  object.
             topic : function () {                   //topic
                 new iTunes().lookupTrack({artist:'The Eels',
                                          track:'The Dog Faced Boy'},
                                          this.callback)
             },
-            'Correct artist': function(err,track) { //Vow
+            'correct track artist 1': function(err,track) { //Vow
+                assert.isNull(err);
+                assertError(err);
+                assert.isNotNull(track);
+                assert.instanceOf(track,Track);
                 assert.equal('The Eels',track.artist);
             }
         },
-        'lookupTrack Duplicate 2': {          //Sub-Context
+        'duplicate track 2': {                      //Sub-Context
         //lookupTrack returns an instance of the Track  object.
             topic : function () {                   //topic
                 new iTunes().lookupTrack({artist:'Corinne Bailey Rae',
                                           track:'Like A Star'},
                                           this.callback)
             },
-            'Correct artist': function(err,track) { //Vow
+            'correct track artist 2': function(err,track) { //Vow
                 assert.isNull(err);
+                assertError(err);
+                assert.isNotNull(track);
+                assert.instanceOf(track,Track);
                 assert.equal('Corinne Bailey Rae',track.artist);
             }
         },
-        'lookupArtist Artist': {                      //Sub-Context
+        'artist': {                      //Sub-Context
         //lookupArtist returns an instance of the Artist object.
             topic : function () {                   //topic
                 new iTunes().lookupArtist({artist:'Smashing Pumpkins'},
                                           this.callback)
             },
-            'Returns Artist': function(err,artist) { //Vow
+            'artist instance': function(err,artist) { //Vow
                 assert.isNull(err);
                 assert.isObject(artist);
                 assert.instanceOf(artist,Artist);

@@ -7,6 +7,8 @@
 var Album = require('./album').Album;
 var Artist = require('./artist').Artist;
 var Track = require('./track').Track;
+var iError = require('./ierror').iError;
+
 
 //Track total and completed instances of the class for debugging purposes.
 var total = 0;
@@ -62,6 +64,7 @@ iResults.prototype.parse = function () {
         success = 0;
     }
     if (self.data == 'undefined') {
+        console.log('undefined data');
     }
     return success;
 };
@@ -71,6 +74,8 @@ iResults.prototype.parse = function () {
  */
 iResults.prototype.getAlbum = function() {
     var album = '';
+    var error = null;
+    var tuple = null;
     if (this.data.wrapperType == 'collection' && this.data.collectionType == 'Album') {
         var album = new Album(this.data.collectionViewUrl,
                               this.data.amgArtistId, 
@@ -79,8 +84,11 @@ iResults.prototype.getAlbum = function() {
                               this.data.artworkUrl60,
                               this.data.artworkUrl100);
     } else {
-    }
-    return album;
+        error = new iError(5);
+    };
+    tuple = {error:error, album:album};
+    console.log(tuple);
+    return tuple;
 };
 
 
@@ -106,6 +114,8 @@ iResults.prototype.getArtist = function() {
  */
 iResults.prototype.getTrack = function() {
     var track = '';
+    var error = null;
+    var tuple = null;
     if (this.data.wrapperType == 'track' && this.data.kind == 'song') {
         var track = new Track(this.data.trackName,
                               this.data.trackId, 
@@ -115,6 +125,9 @@ iResults.prototype.getTrack = function() {
                               this.data.artworkUrl100,
                               this.data.artistName);
     } else {
-    }
-    return track;
+        error = new iError(6);
+    };
+    tuple = {error:error, track:track};
+    console.log(tuple);
+    return tuple;
 };

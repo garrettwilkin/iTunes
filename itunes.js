@@ -10,6 +10,7 @@ var http = require('http');
 var iResults= require('./iresults').iResults;
 var Timer = require('./util/timer').Timer;
 var querystring = require('querystring');
+var iError = require('./ierror').iError;
 
 /*
  * 
@@ -86,21 +87,37 @@ iTunes.prototype.request = function(dataType, callback) {
 iTunes.prototype.processAlbum = function(results, callback) {
     var error = null;
     var data = null;
+    var album = new Album();
     if (results.hits > 1) {
-        error = 1;
-        console.log('processAlbum hits > 1');
+        error = new iError(0);
+        console.log(error);
     } else if ( results.hits == 0)  {
-        error = 1;
-        console.log('processAlbum hits == 0');
+        error = new iError(1);
+        console.log(error);
+    } else if ( results == null)  {
+        error = new iError(3);
+        console.log(error);
     } else {
         data = results.getAlbum();
-        console.log('processAlbum hits == 0');
+        if (data == null) {
+            error = new iError(4);
+            console.log(error);
+        } else if (data.error == null) {
+            album = data.album;
+            console.log('pulled album from data'+ album);
+        } else if (data.error != null) {
+            error = data.error;
+        }
     };
-    callback(error,data);
+    if (error != null) {
+        console.log(error);
+    }
+    console.log('+++++++++++\n'+ album +'\n++++++++++');
+    callback(error,album);
 };
 
 iTunes.prototype.processArtist = function(results, callback) {
-    var error = null;
+    var error = 0;
     var data = null;
     callback(error, data);
 };
@@ -108,14 +125,30 @@ iTunes.prototype.processArtist = function(results, callback) {
 iTunes.prototype.processTrack = function(results, callback) {
     var error = null;
     var data = null;
-    callback(error, data);
+    if (results.hits > 1) {
+        error = new iError(0);
+        console.log(error);
+    } else if ( results.hits == 0)  {
+        error = new iError(1);
+        console.log(error);
+    } else {
+        data = results.getTrack();
+        if (data == null) {
+            error = new iError(7);
+            console.log(error);
+        } else if (data.error == null) {
+            track = data.track;
+        } else if (data.error != null) {
+            error = data.error;
+        }
+    };
+    callback(error, track);
 };
 /*
  As the request to the iTunes store completes, this function is called to process that response.  It passes the job of parsing the results off to the iResults class.  It then determines what type of object should be passed to the callback function based on the dataType requested by they user. The idea here is that in the future, additional objects other than albums will be supported.  That future planning makes dataType necessary.
  */
 
 iTunes.prototype.responseEnd = function(dataType, results, callback) {
-    console.log('responseEnd');
     var self = this;
     var error = null;
     var data = null;
@@ -123,6 +156,7 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
         switch(dataType)
         {
         case 'album':
+            console.log(results);
             self.processAlbum(results,callback);
             break;
         case 'artist':
@@ -135,15 +169,7 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
             };
             break;
         case 'track':
-            if (results.hits > 1) {
-                //console.log('iTunes.responseEnd : ' + dataType + ' : too many results');
-                error = 1;
-            } else if ( results.hits == 0)  {
-                error = 1;
-            } else {
-                //console.log('iTunes.responseEnd : ' + dataType + ' 1 hit!');
-                data = results.getTrack();
-            };
+            self.processTrack(results,callback);
             break;
         case 'raw':
             data = results.data; // returns JSON for full results
@@ -154,7 +180,8 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
     } else {
         error = 1;
         callback(error,data);
-    }
+    };
+    callback(error,data);
 };
 
 /*

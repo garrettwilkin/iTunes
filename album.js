@@ -1,6 +1,15 @@
 /*
  Simple object to hold Album information.  This is included just for ease of understanding getAlbum.
  */
+function Album() {
+    this.storeUrl = 'http://';
+    this.amgArtistId = '000001';
+    this.itunesArtistId = '000001';
+    this.artworkUrl60 = 'http://';
+    this.artworkUrl100 = 'http://';
+    this.itunesArtistId = '000001';
+    this.name = 'Default';
+};
 
 function Album(storeUrl, amgArtistId, itunesArtistId, name, artworkUrl60, artworkUrl100) {
     this.storeUrl = storeUrl;
