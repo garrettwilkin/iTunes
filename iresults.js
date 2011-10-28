@@ -116,6 +116,7 @@ iResults.prototype.getTrack = function() {
     var track = '';
     var error = null;
     var tuple = null;
+    console.log(this.data);
     if (this.data.wrapperType == 'track' && this.data.kind == 'song') {
         var track = new Track(this.data.trackName,
                               this.data.trackId, 

@@ -125,6 +125,7 @@ iTunes.prototype.processArtist = function(results, callback) {
 iTunes.prototype.processTrack = function(results, callback) {
     var error = null;
     var data = null;
+    var track = null;
     if (results.hits > 1) {
         error = new iError(0);
         console.log(error);

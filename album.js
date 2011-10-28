@@ -15,10 +15,9 @@ function Album(storeUrl, amgArtistId, itunesArtistId, name, artworkUrl60, artwor
     this.storeUrl = storeUrl;
     this.amgArtistId = amgArtistId;
     this.itunesArtistId = itunesArtistId;
+    this.name = name;
     this.artworkUrl60 = artworkUrl60;
     this.artworkUrl100 = artworkUrl100;
-    this.itunesArtistId = itunesArtistId;
-    this.name = name;
 };
 exports.Album = Album;
 
