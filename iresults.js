@@ -163,10 +163,8 @@ iResults.prototype.getAlbum = function(target,callback) {
     var error = null;
     var i = 0;
     var found  = 0;
-    console.log(this.data.length);
     while (this.data.length > i && found == 0) {
         var item = this.data[i];
-        console.log(item);
         if (item.wrapperType == 'collection' && 
             item.collectionType == 'Album') {
 
