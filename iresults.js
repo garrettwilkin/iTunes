@@ -56,7 +56,7 @@ iResults.prototype.parse = function () {
     try
     {
         self.rawJSON= JSON.parse(self.glob);
-        self.data = self.rawJSON.results[0];
+        self.data = self.rawJSON.results;
         self.hits= self.rawJSON.resultCount;
     }
     catch (err)
@@ -70,65 +70,130 @@ iResults.prototype.parse = function () {
 };
 
 /*
- Extracts a few items from the iTunes results for an album search and returns them in an object.
- */
-iResults.prototype.getAlbum = function() {
-    var album = '';
-    var error = null;
-    var tuple = null;
-    if (this.data.wrapperType == 'collection' && this.data.collectionType == 'Album') {
-        var album = new Album(this.data.collectionViewUrl,
-                              this.data.amgArtistId, 
-                              this.data.artistId, 
-                              this.data.collectionName,
-                              this.data.artworkUrl60,
-                              this.data.artworkUrl100);
-    } else {
-        error = new iError(5);
-    };
-    tuple = {error:error, album:album};
-    console.log(tuple);
-    return tuple;
-};
-
+ Removes an initial 'The' from strings during search.  In most cases 'The' should not prevent a match.
+*/
+noThe = function(title) {
+    var artArray = title.split(' ');
+    var normal = title;
+    if (artArray[0] == 'The') {
+        artArray.reverse();
+        artArray.pop();
+        artArray.reverse();
+    }
+    normal = artArray.join(' ');
+    return normal
+}
 
 /*
  Extracts a few items from the iTunes results for an artist search and returns them in an object.
  */
-iResults.prototype.getArtist = function() {
-    var artist = '';
-    if (this.data.wrapperType == 'artist') {
-        var artist = new Artist(this.data.artistLinkUrl,
-                              this.data.amgArtistId,
-                              this.data.artistId,
-                              this.data.artistName);
-    } else {
+iResults.prototype.getArtist = function(target,callback) {
+    var artist = null;
+    var error = null;
+    var i = 0;
+    var found  = 0;
+    while (this.data.length > i && found == 0) {
+        var item = this.data[i];
+        if (item.wrapperType == 'artist') {
+            normItemArtist = noThe(item.artistName);
+            normTargetArtist = noThe(target.artist);
+            if (item.artistName == target.artist ||
+                normItemArtist == normTargetArtist) {
+                var artist = new Artist(item.artistLinkUrl,
+                                        item.amgArtistId,
+                                        item.artistId,
+                                        item.artistName);
+                found = 1;
+            };
+        };
+        i++;
+    };
+    if (found == 0) {
+        error = new iError(11);
     }
-    return artist;
+    callback(error,artist);
 };
-
-
 
 /*
  Extracts a few items from the iTunes results for an album search and returns them in an object.
  */
-iResults.prototype.getTrack = function() {
-    var track = '';
+iResults.prototype.getTrack = function(target,callback) {
+    var track = null;
     var error = null;
-    var tuple = null;
-    console.log(this.data);
-    if (this.data.wrapperType == 'track' && this.data.kind == 'song') {
-        var track = new Track(this.data.trackName,
-                              this.data.trackId, 
-                              this.data.trackViewUrl, 
-                              this.data.artistId,
-                              this.data.artworkUrl60,
-                              this.data.artworkUrl100,
-                              this.data.artistName);
-    } else {
-        error = new iError(6);
+    var i = 0;
+    var found  = 0;
+    while (this.data.length > i && found == 0) {
+        var item = this.data[i];
+        if (item.wrapperType == 'track' && 
+            item.kind == 'song' ) {
+
+            normTargetArtist = noThe(target.artist);
+            normItemArtist   = noThe(item.artistName);
+            normTargetTrack  = noThe(target.track);
+            normItemTrack    = noThe(item.trackName);
+
+            if ((item.artistName == target.artist ||
+                normTargetArtist == normItemArtist) &&
+                (item.trackName == target.track ||
+                 normTargetTrack == normItemTrack )) {
+
+                var track = new Track(item.trackName,
+                                      item.trackId, 
+                                      item.trackViewUrl, 
+                                      item.artistId,
+                                      item.artworkUrl60,
+                                      item.artworkUrl100,
+                                      item.artistName);
+                found = 1;
+            };
+        };
+        i++;
     };
-    tuple = {error:error, track:track};
-    console.log(tuple);
-    return tuple;
+    if (found == 0) {
+        error = new iError(9);
+    };
+    callback(error,track);
 };
+
+/*
+ Extracts a few items from the iTunes results for an album search and returns them in an object.
+ */
+iResults.prototype.getAlbum = function(target,callback) {
+    var album = null;
+    var error = null;
+    var i = 0;
+    var found  = 0;
+    console.log(this.data.length);
+    while (this.data.length > i && found == 0) {
+        var item = this.data[i];
+        console.log(item);
+        if (item.wrapperType == 'collection' && 
+            item.collectionType == 'Album') {
+
+            normTargetAlbum  = noThe(target.album );
+            normItemAlbum    = noThe(item.collectionName);
+            normTargetArtist = noThe(target.artist);
+            normItemArtist   = noThe(item.artistName);
+
+            if ((item.artistName == target.artist ||
+                normTargetArtist == normItemArtist) &&
+                (item.collectionName == target.album ||
+                 normTargetAlbum == normItemAlbum )) {
+                album = new Album(item.collectionViewUrl,
+                                  item.amgArtistId, 
+                                  item.artistId, 
+                                  item.collectionName,
+                                  item.artistName,
+                                  item.artworkUrl60,
+                                  item.artworkUrl100);
+                found = 1;
+            }
+        };
+        i++;
+    };
+    if (found == 0) {
+        error = new iError(10);
+    };
+    callback(error,album);
+};
+

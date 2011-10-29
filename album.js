@@ -8,14 +8,16 @@ function Album() {
     this.artworkUrl60 = 'http://';
     this.artworkUrl100 = 'http://';
     this.itunesArtistId = '000001';
+    this.artistName = '000001';
     this.name = 'Default';
 };
 
-function Album(storeUrl, amgArtistId, itunesArtistId, name, artworkUrl60, artworkUrl100) {
+function Album(storeUrl, amgArtistId, itunesArtistId, name, artistName, artworkUrl60, artworkUrl100) {
     this.storeUrl = storeUrl;
     this.amgArtistId = amgArtistId;
     this.itunesArtistId = itunesArtistId;
     this.name = name;
+    this.artistName = artistName;
     this.artworkUrl60 = artworkUrl60;
     this.artworkUrl100 = artworkUrl100;
 };

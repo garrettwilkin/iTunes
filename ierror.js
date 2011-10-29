@@ -19,7 +19,10 @@ function iError(code) {
         this.message = 'Null results';
         break;
     case 4:
-        this.message = 'results.getAlbum returns null';
+        this.message = 'iResults.getAlbum returns null';
+        break;
+    case 10:
+        this.message = 'iResults.getAlbum target not found';
         break;
     case 5:
         this.message = 'iResults.getAlbum bad wrapperType or collectionType';
@@ -29,6 +32,15 @@ function iError(code) {
         break;
     case 7:
         this.message = 'iResults.getTrack returns null';
+        break;
+    case 8:
+        this.message = 'responseEnd: non-supported data type';
+        break;
+    case 9:
+        this.message = 'iResults.getTrack target not found';
+        break;
+    case 11:
+        this.message = 'iResults.getArtist target not found';
         break;
     }
 };

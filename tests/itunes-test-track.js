@@ -42,12 +42,12 @@ var suite = vows.describe('itunes')
                                          track:'The Dog Faced Boy'},
                                          this.callback)
             },
-            'correct track artist 1': function(err,track) { //Vow
+            'correct track artist 1, removes the': function(err,track) { //Vow
                 assert.isNull(err);
                 assertError(err);
                 assert.isNotNull(track);
                 assert.instanceOf(track,Track);
-                assert.equal('The Eels',track.artist);
+                assert.equal('Eels',track.artist);
             }
         },
         'duplicate track 2': {                      //Sub-Context

@@ -19,14 +19,14 @@ var iError = require('./ierror').iError;
  * 
  */
 
-function iParameters() {
+function iParameters(media,entity,attribute,term) {
 
-    this.term = '';
+    this.term = term;
     this.country = 'us';
-    this.media = 'all';
-    this.entity = 'musicTrack';
-    this.attribute = 'all';
-    this.limit = '1';
+    this.media = media;
+    this.entity = entity;
+    this.attribute = attribute;
+    this.limit = '100';
     this.lang = 'en_us';
     this.version = '2';
     this.explicit = 'Yes';
@@ -40,15 +40,14 @@ function iParameters() {
  */
 
 function iTunes() {
-    this.params = new iParameters();
     this.basePath = '/WebObjects/MZStoreServices.woa/wa/wsSearch?';
     this.server = 'ax.itunes.apple.com';
 };
 exports.iTunes = iTunes;
 
 // Converts class' parameters JSON to a query string.
-iTunes.prototype.getQuery = function() {
-    var query = querystring.stringify(this.params);
+iTunes.prototype.getQuery = function(params) {
+    var query = querystring.stringify(params);
     return query;
 };
 
@@ -60,12 +59,12 @@ iTunes.prototype.getQuery = function() {
     - data - an object encapsulating the information relevant to the request. 
  */
 
-iTunes.prototype.request = function(dataType, callback) {
+iTunes.prototype.request = function(dataType, target, params, callback) {
     var self = this;
     var results = new iResults();
-    var clock = new Timer(self.params.term);
+    var clock = new Timer(params.term);
     var apple = http.createClient(80,self.server);
-    var query = self.getQuery();
+    var query = self.getQuery(params);
     var path = self.basePath + query;
     var request = apple.request('GET',path,{host:self.server});
     apple.request('GET',path);
@@ -79,77 +78,16 @@ iTunes.prototype.request = function(dataType, callback) {
         });
         response.on('end',function() {
             clock.elapsed('end');
-            self.responseEnd(dataType,results,callback);
+            self.responseEnd(dataType,target,results,callback);
         });
     });
 };
 
-iTunes.prototype.processAlbum = function(results, callback) {
-    var error = null;
-    var data = null;
-    var album = new Album();
-    if (results.hits > 1) {
-        error = new iError(0);
-        console.log(error);
-    } else if ( results.hits == 0)  {
-        error = new iError(1);
-        console.log(error);
-    } else if ( results == null)  {
-        error = new iError(3);
-        console.log(error);
-    } else {
-        data = results.getAlbum();
-        if (data == null) {
-            error = new iError(4);
-            console.log(error);
-        } else if (data.error == null) {
-            album = data.album;
-            console.log('pulled album from data'+ album);
-        } else if (data.error != null) {
-            error = data.error;
-        }
-    };
-    if (error != null) {
-        console.log(error);
-    }
-    console.log('+++++++++++\n'+ album +'\n++++++++++');
-    callback(error,album);
-};
-
-iTunes.prototype.processArtist = function(results, callback) {
-    var error = 0;
-    var data = null;
-    callback(error, data);
-};
-
-iTunes.prototype.processTrack = function(results, callback) {
-    var error = null;
-    var data = null;
-    var track = null;
-    if (results.hits > 1) {
-        error = new iError(0);
-        console.log(error);
-    } else if ( results.hits == 0)  {
-        error = new iError(1);
-        console.log(error);
-    } else {
-        data = results.getTrack();
-        if (data == null) {
-            error = new iError(7);
-            console.log(error);
-        } else if (data.error == null) {
-            track = data.track;
-        } else if (data.error != null) {
-            error = data.error;
-        }
-    };
-    callback(error, track);
-};
 /*
  As the request to the iTunes store completes, this function is called to process that response.  It passes the job of parsing the results off to the iResults class.  It then determines what type of object should be passed to the callback function based on the dataType requested by they user. The idea here is that in the future, additional objects other than albums will be supported.  That future planning makes dataType necessary.
  */
 
-iTunes.prototype.responseEnd = function(dataType, results, callback) {
+iTunes.prototype.responseEnd = function(dataType, target, results, callback) {
     var self = this;
     var error = null;
     var data = null;
@@ -157,32 +95,25 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
         switch(dataType)
         {
         case 'album':
-            console.log(results);
-            self.processAlbum(results,callback);
+            results.getAlbum(target,callback);
             break;
         case 'artist':
-            if (results.hits > 1) {
-                error = 1;
-            } else if ( results.hits == 0)  {
-                error = 1;
-            } else {
-                data = results.getArtist();
-            };
+            results.getArtist(target,callback);
             break;
         case 'track':
-            self.processTrack(results,callback);
+            results.getTrack(target,callback);
             break;
         case 'raw':
             data = results.data; // returns JSON for full results
+            break;
         default:
-            error = 1;
+            error = iError(8);
             callback(error,data);
         }
     } else {
-        error = 1;
+        error = iError(2);
         callback(error,data);
     };
-    callback(error,data);
 };
 
 /*
@@ -190,34 +121,29 @@ iTunes.prototype.responseEnd = function(dataType, results, callback) {
                 2 - requests that an Album data type be passed to the callback.
  */
 
-iTunes.prototype.lookupAlbum = function(params, callback) {
+iTunes.prototype.lookupAlbum = function(target, callback) {
     var self = this;
-    var artist = params.artist;
-    var album = params.album;
-    self.params.media='music';
-    self.params.entity='album';
-    self.params.attribute='albumTerm';
-    self.params.term=album;
-    self.request('album',callback);
+    params = new iParameters('music',
+                             'album',
+                             'albumTerm',
+                             target.album);
+    self.request('album',target,params,callback);
 };
 
-iTunes.prototype.lookupArtist = function(params, callback) {
+iTunes.prototype.lookupArtist = function(target, callback) {
     var self = this;
-    var artist = params.artist;
-    self.params.media='music';
-    self.params.entity='musicArtist';
-    self.params.attribute='artistTerm';
-    self.params.term=artist;
-    self.request('artist',callback);
+    params = new iParameters('music',
+                             'musicArtist',
+                             'artistTerm',
+                             target.artist);
+    self.request('artist',target,params,callback);
 };
 
-iTunes.prototype.lookupTrack = function(params, callback) {
+iTunes.prototype.lookupTrack = function(target, callback) {
     var self = this;
-    var artist = params.artist;
-    var track = params.track;
-    self.params.media='music';
-    self.params.entity='musicTrack';
-    self.params.attribute='musicTrackTerm';
-    self.params.term = track;
-    self.request('track',callback);
+    params = new iParameters('music',
+                             'musicTrack',
+                             'musicTrackTerm',
+                             target.track);
+    self.request('track',target,params,callback);
 }

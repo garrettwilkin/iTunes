@@ -3,10 +3,9 @@
  * Simple demonstration of the iTunes class. 
  */
 
-require.paths.unshift(require('path').join(__dirname, '..','util'));
 
-var Divider = require('divider').Divider;
-var iTunes = require('itunes').iTunes;
+var Divider = require('../util/divider').Divider;
+var iTunes = require('../itunes').iTunes;
 
 /*
  * Demo of iTunes class.
