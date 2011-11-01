@@ -7,66 +7,48 @@ var vows = require('vows');
     Artist = require('../artist').Artist;
     iError = require('../ierror').iError;
 
-function assertError(e) {
-    if (e != null) {
-        console.log(e.message);
-    };
-    return function (e, res) {
-        assert.isNull(e);
+var api = {
+    track: function (target) {
+        return function () {
+            new iTunes().lookupTrack({artist:target.artist,track:target.track}, this.callback);
+        };
     }
-}
+};
+
+function trackValidator(title){
+    return function (error, track) {
+            assert.isNull(error);
+            assert.isNotNull(track);
+            assert.isObject(track);
+            assert.instanceOf(track,Track);
+            assert.equal(title.toLowerCase(),
+                         track.name.toLowerCase());
+    }
+};
 
 var suite = vows.describe('itunes')
-.addBatch({                                         //Batch
-    'iTunes Object': {                              //Context
-    //Make vows on the iTunes class
-        'unique track': {                           //Sub-Context
-            topic : function () {                   //topic
-                new iTunes().lookupTrack({artist:'Smashing Pumpkins',
-                                          track:'I Am One'},
-                                          this.callback)
-            },
-            'Returns Track': function(err,track) { //Vow
-                assert.isNull(err);
-                assertError(err);
-                assert.isNotNull(track);
-                assert.isObject(track);
-                assert.instanceOf(track,Track);
-                assert.equal('I Am One',track.name);
-            }
+.addBatch({
+    'iTunes Object': {
+        'The Beatles - Let it be': {
+            topic: api.track({artist:'The Beatles',track:'Let it be'}),
+            'Let it Be': trackValidator('Let It Be')
         },
-        'duplicate track 1': {                      //Sub-Context
-        //lookupTrack returns an instance of the Track  object.
-            topic : function () {                   //topic
-                new iTunes().lookupTrack({artist:'The Eels',
-                                         track:'The Dog Faced Boy'},
-                                         this.callback)
-            },
-            'correct track artist 1, removes the': function(err,track) { //Vow
-                assert.isNull(err);
-                assertError(err);
-                assert.isNotNull(track);
-                assert.instanceOf(track,Track);
-                assert.equal('Eels',track.artist);
-            }
+        'Smashing Pumpkins - I Am One': {
+            topic: api.track({artist:'Smashing Pumpkins',
+                              track:'I Am One'}),
+            'I Am One': trackValidator('I Am One')
         },
-        'duplicate track 2': {                      //Sub-Context
-        //lookupTrack returns an instance of the Track  object.
-            topic : function () {                   //topic
-                new iTunes().lookupTrack({artist:'Corinne Bailey Rae',
-                                          track:'Like A Star'},
-                                          this.callback)
-            },
-            'correct track artist 2': function(err,track) { //Vow
-                assert.isNull(err);
-                assertError(err);
-                assert.isNotNull(track);
-                assert.instanceOf(track,Track);
-                assert.equal('Corinne Bailey Rae',track.artist);
-            }
+        'The Eels - Dog Faced Boy': {
+            topic: api.track({artist:'The Eels',
+                              track:'The Dog Faced Boy'}),
+            'Dog Faced Boy': trackValidator('Dog Faced Boy')
+        },
+        'Corinne Bailey Rae - Like A Star': {
+            topic: api.track({artist:'Corinne Bailey Rae',
+                              track:'Like A Star'}),
+            'Like a Star': trackValidator('Like A Star')
         },
         'Basic Components': {
-        //Assert that the getQuery method on the iTunes object returns a string 
             topic : new iTunes(),
             'getQuery returns String': function (topic) {
                 assert.isString(topic.getQuery()); 

@@ -73,9 +73,10 @@ iResults.prototype.parse = function () {
  Removes an initial 'The' from strings during search.  In most cases 'The' should not prevent a match.
 */
 noThe = function(title) {
+    title = title.toLowerCase();
     var artArray = title.split(' ');
     var normal = title;
-    if (artArray[0] == 'The') {
+    if (artArray[0] == 'the') {
         artArray.reverse();
         artArray.pop();
         artArray.reverse();
@@ -122,15 +123,30 @@ iResults.prototype.getTrack = function(target,callback) {
     var error = null;
     var i = 0;
     var found  = 0;
+    var resultSet = '';
+    normTargetArtist = noThe(target.artist);
+    normTargetTrack  = noThe(target.track);
+    var userd = {input:
+                   {Track:normTargetTrack,
+                    Artist:normTargetArtist}};
+    //console.log(userd);
     while (this.data.length > i && found == 0) {
         var item = this.data[i];
         if (item.wrapperType == 'track' && 
             item.kind == 'song' ) {
 
-            normTargetArtist = noThe(target.artist);
             normItemArtist   = noThe(item.artistName);
-            normTargetTrack  = noThe(target.track);
             normItemTrack    = noThe(item.trackName);
+            resultSet = {reply:
+                           {Track:normItemTrack,
+                            Artist:normItemArtist}};
+         //   console.log(resultSet);
+         /* console.log(
+                       normTargetArtist + ' ' +
+                       normItemArtist + ' ' +
+                       normTargetTrack + ' ' +
+                       normItemTrack + ' '
+                       );*/
 
             if ((item.artistName == target.artist ||
                 normTargetArtist == normItemArtist) &&
