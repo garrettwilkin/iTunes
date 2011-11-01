@@ -7,33 +7,41 @@ var vows = require('vows');
     Artist = require('../artist').Artist;
     iError = require('../ierror').iError;
 
-function assertError(e) {
-    if (e != null) {
-        console.log(e.message);
-    };
-    return function (e, res) {
-        assert.isNull(e);
+var api = {
+    track: function (target) {
+        return function () {
+            new iTunes().lookupAlbum({artist:target.artist,
+                                      album:target.album}, 
+                                      this.callback);
+        };
     }
-}
+};
+
+function albumValidator(title){
+    return function (error, album) {
+	    assert.isNull(error);
+	    assert.isNotNull(album);
+	    assert.isObject(album);
+	    assert.instanceOf(album,Album);
+	    assert.equal(title.toLowerCase(),
+                         album.name.toLowerCase());
+	    }
+};
 
 var suite = vows.describe('itunes')
-.addBatch({                                         //Batch
-    'iTunes Object': {                              //Context
-    //Make vows on the iTunes class
-        'lookupAlbum Album': {                      //Sub-Context
-        //lookupAlbum an instance of the Album object.
-            topic : function () {                   //topic
-                new iTunes().lookupAlbum({artist:'Smashing Pumpkins', 
-                                          album:'Gish'},
-                                          this.callback)
-            },
-            'Returns album': function(err,album) { //Vow
-                assert.isNull(err);
-                assertError(err);
-                assert.isObject(album);
-                assert.instanceOf(album,Album);
-                assert.equal(album.name,'Gish');
-            }
+.addBatch({
+    'iTunes Object': {
+        'Aerosmith - Get A Grip': {
+            topic : api.track({artist:'Aerosmith',album:'Get A Grip'}),
+            'Get A Grip': albumValidator('Get A Grip')
+        },
+        'Billy Joel - River of Dreams': {
+            topic : api.track({artist:'Billy Joel',album:'River of Dreams'}),
+            'River of Dreams': albumValidator('River of Dreams')
+        },
+        'Smashing Pumpkins - Gish': {
+            topic : api.track({artist:'Smashing Pumpkins',album:'Gish'}),
+            'Gish': albumValidator('Gish')
         }
     }
 })

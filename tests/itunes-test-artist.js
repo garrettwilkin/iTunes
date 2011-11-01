@@ -7,31 +7,43 @@ var vows = require('vows');
     Artist = require('../artist').Artist;
     iError = require('../ierror').iError;
 
-function assertError(e) {
-    if (e != null) {
-        console.log(e.message);
-    };
-    return function (e, res) {
-        assert.isNull(e);
+var api = {
+    artist: function (target) {
+        return function () {
+            new iTunes().lookupArtist({artist:target.artist},
+                                      this.callback);
+        };
     }
-}
+};
+
+function artistValidator(title){
+    return function (error, artist) {
+            assert.isNull(error);
+            assert.isNotNull(artist);
+            assert.isObject(artist);
+            assert.instanceOf(artist,Artist);
+            assert.equal(title.toLowerCase(),
+                         artist.artistName.toLowerCase());
+            }
+};
 
 var suite = vows.describe('itunes')
-.addBatch({                                         //Batch
-    'iTunes Object': {                              //Context
-    //Make vows on the iTunes class
-        'artist': {                      //Sub-Context
-        //lookupArtist returns an instance of the Artist object.
-            topic : function () {                   //topic
-                new iTunes().lookupArtist({artist:'Smashing Pumpkins'},
-                                          this.callback)
-            },
-            'artist instance': function(err,artist) { //Vow
-                assert.isNull(err);
-                assert.isObject(artist);
-                assert.instanceOf(artist,Artist);
-                assert.equal(artist.artistName,'Smashing Pumpkins');
-            }
+.addBatch({
+    'iTunes Object': {
+        'Beirut': {
+            topic : api.artist({artist:'Beirut'},
+                                          this.callback),
+            'Beirut': artistValidator('Beirut')
+        },
+        'Smashing Pumpkins' : {
+            topic : api.artist({artist:'Smashing Pumpkins'},
+                                          this.callback),
+            'Smashing Pumpkins': artistValidator('Smashing Pumpkins')
+        },
+        'The Police' : {
+            topic : api.artist({artist:'The Police'},
+                                          this.callback),
+            'The Police': artistValidator('The Police')
         }
     }
 })

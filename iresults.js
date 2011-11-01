@@ -93,11 +93,17 @@ iResults.prototype.getArtist = function(target,callback) {
     var error = null;
     var i = 0;
     var found  = 0;
+    normTargetArtist = noThe(target.artist);
+    var userd = {input:
+                    {artist:normTargetArtist}};
+    //console.log(userd);
     while (this.data.length > i && found == 0) {
         var item = this.data[i];
         if (item.wrapperType == 'artist') {
             normItemArtist = noThe(item.artistName);
-            normTargetArtist = noThe(target.artist);
+            var resultSet = {reply:
+                                {artist:normItemArtist}};
+            //console.log(resultSet);
             if (item.artistName == target.artist ||
                 normItemArtist == normTargetArtist) {
                 var artist = new Artist(item.artistLinkUrl,
@@ -179,15 +185,23 @@ iResults.prototype.getAlbum = function(target,callback) {
     var error = null;
     var i = 0;
     var found  = 0;
+    normTargetAlbum  = noThe(target.album );
+    normTargetArtist = noThe(target.artist);
+    var userd = {input:
+                   {Track:normTargetAlbum,
+                    Artist:normTargetAlbum}};
+    //console.log(userd);
     while (this.data.length > i && found == 0) {
         var item = this.data[i];
         if (item.wrapperType == 'collection' && 
             item.collectionType == 'Album') {
 
-            normTargetAlbum  = noThe(target.album );
             normItemAlbum    = noThe(item.collectionName);
-            normTargetArtist = noThe(target.artist);
             normItemArtist   = noThe(item.artistName);
+            resultSet = {reply:
+                           {Track:normItemAlbum,
+                            Artist:normItemArtist}};
+            //console.log(resultSet);
 
             if ((item.artistName == target.artist ||
                 normTargetArtist == normItemArtist) &&
