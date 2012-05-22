@@ -1,7 +1,7 @@
 iTunes: an implementation of the iTunes API in Node.js.
 ======================================================
 
-Authored by Garrett Wilkin (http://geethink.com/blog)
+Authored by Garrett Wilkin (http://about.me/garrettwilkin)
 
 It uses both the iTunes API for retrieving media information and the LinkShare API for generating affiliate links to the iTunes store. See an example in simple-node.js.
 
