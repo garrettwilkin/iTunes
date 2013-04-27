@@ -63,11 +63,15 @@ iTunes.prototype.request = function(dataType, target, params, callback) {
     var self = this;
     var results = new iResults();
     var clock = new Timer(params.term);
-    var apple = http.createClient(80,self.server);
     var query = self.getQuery(params);
     var path = self.basePath + query;
-    var request = apple.request('GET',path,{host:self.server});
-    apple.request('GET',path);
+    var options = {
+        host: self.server,
+        port: 80,
+        path: path,
+        method: 'GET'
+    }
+    var request = http.request(options);
     request.end();
     clock.set();
     request.on('response', function(response) {
